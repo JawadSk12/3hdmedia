@@ -1,0 +1,630 @@
+/* ================================================================
+   3HD MEDIA — GLOBAL STYLESHEET
+   Premium Corporate Design System
+   ================================================================ */
+
+/* ── 1. GOOGLE FONTS imported via index.html ────────────────────── */
+
+/* ── 2. DESIGN TOKENS ───────────────────────────────────────────── */
+:root {
+  /* Blues */
+  --blue-950: #020B2E;
+  --blue-900: #040D21;
+  --blue-800: #0A1A4A;
+  --blue-700: #0F2563;
+  --blue-600: #1E3A8A;
+  --blue-500: #1D4ED8;
+  --blue-400: #2563EB;
+  --blue-300: #3B82F6;
+  --blue-200: #60A5FA;
+  --blue-100: #93C5FD;
+  --blue-50:  #DBEAFE;
+  --blue-10:  #EFF6FF;
+
+  /* Reds */
+  --red-600: #B91C1C;
+  --red-500: #DC2626;
+  --red-400: #EF4444;
+  --red-100: #FEE2E2;
+
+  /* Slate */
+  --slate-950: #020617;
+  --slate-900: #0F172A;
+  --slate-800: #1E293B;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748B;
+  --slate-400: #94A3B8;
+  --slate-300: #CBD5E1;
+  --slate-200: #E2E8F0;
+  --slate-100: #F1F5F9;
+  --slate-50:  #F8FAFC;
+
+  /* White */
+  --white: #FFFFFF;
+
+  /* Typography */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* Gradients */
+  --g-blue:      linear-gradient(135deg, var(--blue-600) 0%, var(--blue-400) 60%, var(--blue-200) 100%);
+  --g-blue-text: linear-gradient(135deg, var(--blue-200) 0%, #38BDF8 100%);
+  --g-red:       linear-gradient(135deg, var(--red-600), var(--red-400));
+  --g-dark:      linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 100%);
+  --g-hero:      linear-gradient(145deg, #040D21 0%, #071432 55%, #0A1A4A 100%);
+
+  /* Shadows */
+  --shadow-sm:  0 1px  4px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.07);
+  --shadow-xl:  0 24px 64px rgba(0,0,0,.16), 0 8px 20px rgba(0,0,0,.1);
+  --shadow-blue: 0 8px 32px rgba(29,78,216,.25);
+  --shadow-blue-lg: 0 16px 48px rgba(29,78,216,.35);
+
+  /* Transitions */
+  --t-fast: 120ms ease;
+  --t-base: 240ms cubic-bezier(.4,0,.2,1);
+  --t-slow: 480ms cubic-bezier(.4,0,.2,1);
+
+  /* Layout */
+  --nav-h: 72px;
+  --max-w: 1280px;
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-full: 9999px;
+}
+
+/* ── 3. RESET ────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { scroll-behavior: smooth; font-size: 16px; }
+body  {
+  font-family: var(--font-body);
+  color: var(--slate-800);
+  background: var(--white);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+img   { max-width: 100%; height: auto; display: block; }
+a     { text-decoration: none; color: inherit; }
+ul,ol { list-style: none; }
+button, input, textarea, select { font-family: inherit; }
+input, textarea, select { -webkit-appearance: none; appearance: none; }
+
+/* ── 4. TYPOGRAPHY ───────────────────────────────────────────────── */
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  letter-spacing: -.025em;
+  color: var(--slate-900);
+}
+
+.text-gradient-blue {
+  background: var(--g-blue-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(135deg, var(--red-400) 0%, var(--blue-300) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── 5. LAYOUT ───────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section        { padding: 6rem 0; }
+.section--tight { padding: 4rem 0; }
+.section--alt   { background: var(--slate-50); }
+.section--dark  { background: var(--blue-900); }
+
+/* ── 6. GLOBAL NAV OFFSET ────────────────────────────────────────── */
+.page-offset { padding-top: var(--nav-h); }
+
+/* ── 7. BUTTONS ──────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  padding: .7rem 1.6rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 600;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--t-base);
+  white-space: nowrap;
+  line-height: 1.2;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.08);
+  opacity: 0;
+  transition: var(--t-base);
+}
+.btn:hover::before { opacity: 1; }
+
+.btn-primary {
+  background: var(--blue-500);
+  color: var(--white);
+  border-color: var(--blue-500);
+  box-shadow: 0 4px 14px rgba(29,78,216,.3);
+}
+.btn-primary:hover {
+  background: var(--blue-600);
+  border-color: var(--blue-600);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(29,78,216,.4);
+}
+
+.btn-ghost-light {
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  border-color: rgba(255,255,255,.25);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost-light:hover {
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.5);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--blue-500);
+  border-color: var(--blue-300);
+}
+.btn-outline:hover {
+  background: var(--blue-500);
+  color: var(--white);
+  border-color: var(--blue-500);
+  transform: translateY(-2px);
+}
+
+.btn-white {
+  background: var(--white);
+  color: var(--blue-700);
+  border-color: var(--white);
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+.btn-lg { padding: .875rem 2.25rem; font-size: 1rem; border-radius: var(--radius-lg); }
+.btn-sm { padding: .45rem 1rem;    font-size: .82rem; }
+
+/* ── 8. CARDS ────────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  transition: var(--t-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(29,78,216,.15);
+}
+
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  padding: 1px;
+  background: var(--g-blue);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: var(--t-base);
+}
+.card:hover .card-gradient-border::before,
+.card-gradient-border:hover::before { opacity: 1; }
+
+/* ── 9. FORM ELEMENTS ────────────────────────────────────────────── */
+.input-field {
+  width: 100%;
+  padding: .8rem 1.1rem;
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-md);
+  font-size: .95rem;
+  color: var(--slate-800);
+  background: var(--white);
+  transition: var(--t-base);
+  outline: none;
+  line-height: 1.5;
+}
+
+.input-field:focus {
+  border-color: var(--blue-400);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+
+.input-field.error { border-color: var(--red-400); }
+.input-field.error:focus { box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
+
+.input-field::placeholder { color: var(--slate-400); }
+
+.input-label {
+  display: block;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  margin-bottom: .45rem;
+}
+
+/* ── 10. SECTION LABELS / CHIPS ──────────────────────────────────── */
+.label-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .32rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.label-chip-blue {
+  background: rgba(29,78,216,.1);
+  color: var(--blue-500);
+  border: 1px solid rgba(29,78,216,.2);
+}
+
+.label-chip-dark {
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(8px);
+}
+
+.label-chip-red {
+  background: rgba(239,68,68,.1);
+  color: var(--red-500);
+  border: 1px solid rgba(239,68,68,.2);
+}
+
+/* ── 11. TAGS ────────────────────────────────────────────────────── */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-size: .875rem;
+  font-weight: 600;
+  background: var(--slate-100);
+  color: var(--slate-700);
+  border: 1.5px solid var(--slate-200);
+  transition: var(--t-base);
+  cursor: default;
+}
+
+.tag-pill:hover {
+  background: var(--blue-500);
+  color: var(--white);
+  border-color: var(--blue-500);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-blue);
+}
+
+/* ── 12. MARQUEE ──────────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  gap: 0;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-wrap {
+  overflow: hidden;
+  background: var(--blue-500);
+  padding: 1rem 0;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0 2rem;
+  font-size: .85rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.9);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.marquee-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.45);
+  flex-shrink: 0;
+}
+
+/* ── 13. DIVIDERS ────────────────────────────────────────────────── */
+.divider-blue {
+  width: 52px;
+  height: 4px;
+  background: var(--g-blue);
+  border-radius: var(--radius-full);
+  margin: 1.1rem 0;
+}
+
+/* ── 14. SCROLL PROGRESS ─────────────────────────────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue-500), var(--blue-200), var(--red-400));
+  z-index: 9999;
+  transform-origin: left;
+  transition: width .1s ease;
+}
+
+/* ── 15. GRID UTILITIES ──────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+
+/* ── 16. CHECKLIST ITEMS ─────────────────────────────────────────── */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  transition: var(--t-base);
+}
+
+.check-item:hover {
+  border-color: rgba(29,78,216,.25);
+  background: var(--blue-10);
+  transform: translateX(4px);
+}
+
+.check-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--g-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--white);
+}
+
+/* ── 17. PROCESS STEPS ───────────────────────────────────────────── */
+.step-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  transition: var(--t-base);
+}
+
+.step-card:hover {
+  border-color: rgba(29,78,216,.2);
+  box-shadow: var(--shadow-md);
+}
+
+.step-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--g-blue);
+  color: var(--white);
+  font-weight: 800;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-blue);
+}
+
+/* ── 18. INFO CARDS ──────────────────────────────────────────────── */
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--t-base);
+  display: block;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(29,78,216,.2);
+}
+
+.info-icon-wrap {
+  width: 68px; height: 68px;
+  border-radius: 18px;
+  background: var(--g-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  color: var(--white);
+  box-shadow: var(--shadow-blue);
+}
+
+/* ── 19. MAP WRAPPER ─────────────────────────────────────────────── */
+.map-wrap {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--slate-200);
+  height: 420px;
+}
+.map-wrap iframe { width: 100%; height: 100%; border: none; }
+
+/* ── 20. CTA BANNER ──────────────────────────────────────────────── */
+.cta-section {
+  background: var(--g-dark);
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 0;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+.cta-section::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; right: -60px;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(rgba(29,78,216,.2), transparent 70%);
+  pointer-events: none;
+}
+
+/* ── 21. FOOTER ──────────────────────────────────────────────────── */
+.footer { background: var(--slate-950); }
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr 1fr 1.6fr;
+  gap: 3rem;
+  padding: 4.5rem 0 3rem;
+}
+
+.footer-col-title {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+  font-family: var(--font-body);
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: .875rem;
+  color: var(--slate-500);
+  transition: var(--t-base);
+  padding: .3rem 0;
+}
+.footer-link:hover { color: var(--blue-200); transform: translateX(4px); }
+
+.social-btn {
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--slate-500);
+  transition: var(--t-base);
+}
+.social-btn:hover {
+  background: var(--blue-500);
+  border-color: var(--blue-500);
+  color: var(--white);
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 1.35rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ── 22. GLASS CARD (hero / dark sections) ───────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(16px);
+}
+
+/* ── 23. HERO ORBS ───────────────────────────────────────────────── */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+/* ── 24. BREADCRUMB ──────────────────────────────────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .8rem;
+  color: rgba(255,255,255,.45);
+  margin-bottom: 1rem;
+}
+.breadcrumb a { transition: var(--t-base); }
+.breadcrumb a:hover { color: rgba(255,255,255,.8); }
+
+/* ── 25. RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .footer-main { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .grid-4      { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .grid-3    { grid-template-columns: repeat(2, 1fr); }
+  .grid-2    { grid-template-columns: 1fr; }
+  .section   { padding: 4rem 0; }
+}
+
+@media (max-width: 640px) {
+  .section   { padding: 3rem 0; }
+  .grid-3    { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
