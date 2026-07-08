@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Mail, Phone, MapPin } from 'lucide-react'
+import logo from '../assets/logo.png'
 
 const FacebookIcon = () => (
   <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
@@ -26,21 +27,7 @@ const InstagramIcon = () => (
 )
 
 const Logo = () => (
-  <svg width="32" height="32" viewBox="0 0 44 44" fill="none">
-    <defs>
-      <linearGradient id="footer-logo" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#EF4444" />
-        <stop offset="100%" stopColor="#60A5FA" />
-      </linearGradient>
-    </defs>
-    <circle cx="22" cy="22" r="19.5" stroke="url(#footer-logo)" strokeWidth="2.5" fill="none" />
-    <circle cx="22" cy="22" r="12" stroke="url(#footer-logo)" strokeWidth="1.5" fill="none" opacity="0.6" />
-    <circle cx="22" cy="22" r="5.5" fill="url(#footer-logo)" />
-    <line x1="22" y1="2"  x2="22" y2="10" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" />
-    <line x1="22" y1="34" x2="22" y2="42" stroke="#60A5FA" strokeWidth="2" strokeLinecap="round" />
-    <line x1="2"  y1="22" x2="10" y2="22" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" />
-    <line x1="34" y1="22" x2="42" y2="22" stroke="#60A5FA" strokeWidth="2" strokeLinecap="round" />
-  </svg>
+  <img src={logo} alt="3HD Media" style={{ height: '44px', width: 'auto', objectFit: 'contain', marginBottom: '1.1rem', display: 'block' }} />
 )
 
 const quickLinks = [
@@ -70,13 +57,7 @@ export default function Footer() {
         <div className="footer-main">
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '.6rem', marginBottom: '1.1rem' }}>
-              <Logo />
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.1rem' }}>
-                <span style={{ color: '#EF4444' }}>3HD</span>{' '}
-                <span style={{ color: 'var(--blue-200)' }}>Media</span>
-              </span>
-            </div>
+            <Logo />
             <p style={{ fontSize: '.875rem', color: 'var(--slate-500)', lineHeight: '1.65', marginBottom: '1.5rem', maxWidth: '230px' }}>
               Pioneers in digital media, advertising & professional training. Serving clients and students across India.
             </p>
