@@ -1,29 +1,110 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Smartphone, Wifi, Globe, Mic, MapPin, Rocket, Video, MonitorPlay, Bluetooth, Share2, Mail, Clock, Phone } from 'lucide-react'
+import {
+  Smartphone, Wifi, Globe, Mic, MapPin, Rocket, Video, MonitorPlay,
+  Bluetooth, Share2, Mail, Clock, Phone,
+} from 'lucide-react'
 import PageHero from '../components/PageHero'
 import ContactForm from '../components/ContactForm'
 
-const services = [
-  { icon: <Smartphone size={22} />, name: 'Mobile Video Streaming',  color: ['#EBF8FF', '#1565C7'] },
-  { icon: <Wifi size={22} />,       name: 'WiFi Advertising',        color: ['#F0FDF4', '#16A34A'] },
-  { icon: <Globe size={22} />,      name: 'Internet Advertising',    color: ['#FFF7ED', '#EA580C'] },
-  { icon: <Mic size={22} />,        name: 'Regional Voice SMS',      color: ['#FDF4FF', '#9333EA'] },
-  { icon: <MapPin size={22} />,     name: 'Location Advertising',    color: ['#FFF1F2', '#E11D48'] },
-  { icon: <Rocket size={22} />,     name: 'Product Launches',        color: ['#FFFBEB', '#D97706'] },
-  { icon: <Video size={22} />,      name: 'Video SMS',               color: ['#EFF6FF', '#2563EB'] },
-  { icon: <MonitorPlay size={22} />, name: 'Mobile Video Training',  color: ['#F0FDF4', '#15803D'] },
-  { icon: <Bluetooth size={22} />,  name: 'Bluetooth Advertising',   color: ['#EFF9FF', '#0891B2'] },
-  { icon: <Share2 size={22} />,     name: 'Social Media',            color: ['#FFF1F2', '#DB2777'] },
-  { icon: <Mail size={22} />,       name: 'Video Emails',            color: ['#F5F3FF', '#7C3AED'] },
+/* ── Service data grouped into 3 categories ─────────────────── */
+const serviceGroups = [
+  {
+    key:      'mobile',
+    emoji:    '🎬',
+    label:    'Mobile & Video Advertising',
+    desc:     'High-impact video-first ad formats delivered to audiences wherever they are.',
+    accentBg: 'rgba(37,99,235,.06)',
+    accentBorder: 'rgba(37,99,235,.14)',
+    services: [
+      {
+        icon: <MonitorPlay size={22} />, name: 'Mobile Video Streaming',
+        desc: 'Stream targeted video ads directly to mobile audiences at scale across India.',
+        color: ['#EBF8FF', '#1565C7'],
+      },
+      {
+        icon: <Video size={22} />, name: 'Video SMS',
+        desc: 'Send engaging video messages via SMS — a direct and impactful mobile channel.',
+        color: ['#EFF6FF', '#2563EB'],
+      },
+      {
+        icon: <Mail size={22} />, name: 'Video Emails',
+        desc: 'Embed rich video content inside email campaigns for superior engagement rates.',
+        color: ['#F5F3FF', '#7C3AED'],
+      },
+      {
+        icon: <Smartphone size={22} />, name: 'Mobile Video Training',
+        desc: 'Educate and onboard your audience with mobile-optimised video training content.',
+        color: ['#F0FDF4', '#15803D'],
+      },
+    ],
+  },
+  {
+    key:      'location',
+    emoji:    '📡',
+    label:    'Location & Network Advertising',
+    desc:     'Reach audiences based on where they are — through WiFi, internet, Bluetooth, and proximity signals.',
+    accentBg: 'rgba(22,163,74,.05)',
+    accentBorder: 'rgba(22,163,74,.13)',
+    services: [
+      {
+        icon: <Wifi size={22} />, name: 'WiFi Advertising',
+        desc: 'Serve targeted ads to users connecting via public and private WiFi hotspots.',
+        color: ['#F0FDF4', '#16A34A'],
+      },
+      {
+        icon: <Globe size={22} />, name: 'Internet Advertising',
+        desc: 'Display and native ad placements across India\'s largest internet ad networks.',
+        color: ['#FFF7ED', '#EA580C'],
+      },
+      {
+        icon: <Bluetooth size={22} />, name: 'Bluetooth Advertising',
+        desc: 'Proximity marketing via Bluetooth beacons — engage customers in-store and on-site.',
+        color: ['#EFF9FF', '#0891B2'],
+      },
+      {
+        icon: <MapPin size={22} />, name: 'Location Advertising',
+        desc: 'Hyper-local geo-targeted campaigns to reach the right people in the right place.',
+        color: ['#FFF1F2', '#E11D48'],
+      },
+      {
+        icon: <Mic size={22} />, name: 'Regional Voice SMS',
+        desc: 'Voice message broadcasts in regional languages — for broad, local audience reach.',
+        color: ['#FDF4FF', '#9333EA'],
+      },
+    ],
+  },
+  {
+    key:      'social',
+    emoji:    '📣',
+    label:    'Social & Campaign Services',
+    desc:     'Brand-building and launch campaigns powered by social media and experiential marketing.',
+    accentBg: 'rgba(219,39,119,.05)',
+    accentBorder: 'rgba(219,39,119,.13)',
+    services: [
+      {
+        icon: <Share2 size={22} />, name: 'Social Media',
+        desc: 'Comprehensive social media management and paid advertising on all major platforms.',
+        color: ['#FFF1F2', '#DB2777'],
+      },
+      {
+        icon: <Rocket size={22} />, name: 'Product Launches',
+        desc: 'End-to-end campaign planning and execution for impactful product launch moments.',
+        color: ['#FFFBEB', '#D97706'],
+      },
+    ],
+  },
 ]
 
 const enquiryFields = [
-  { name: 'name',    label: 'Full Name',    placeholder: 'Your full name',       required: true,  half: true },
-  { name: 'email',   label: 'Email',        placeholder: 'you@email.com',        required: true,  type: 'email', half: true },
-  { name: 'phone',   label: 'Phone Number', placeholder: '+91 XXXXX XXXXX',      required: true,  type: 'tel' },
-  { name: 'service', label: 'Service of Interest', required: false,
-    options: services.map(s => s.name).concat(['Multiple Services']) },
+  { name: 'name',    label: 'Full Name',          placeholder: 'Your full name',    required: true,  half: true },
+  { name: 'company', label: 'Company',            placeholder: 'Your company name', required: false, half: true },
+  { name: 'email',   label: 'Email',              placeholder: 'you@email.com',     required: true,  type: 'email' },
+  { name: 'phone',   label: 'Phone Number',       placeholder: '+91 XXXXX XXXXX',   required: true,  type: 'tel' },
+  {
+    name: 'service', label: 'Service Interested In', required: false,
+    options: serviceGroups.flatMap(g => g.services.map(s => s.name)).concat(['Multiple Services']),
+  },
   { name: 'message', label: 'Message', placeholder: 'Tell us about your requirement…', required: true, type: 'textarea' },
 ]
 
@@ -33,97 +114,110 @@ export default function Services() {
       <PageHero
         eyebrow="What We Do"
         title="Our Services"
-        subtitle="Our experienced and dedicated staff provide the following services with a smile."
+        subtitle='Our experienced and dedicated staff provide the following services with a smile.'
         breadcrumb="Services"
       />
 
-      {/* Services grid */}
+      {/* ── GROUPED SERVICES ──────────────────────────────────── */}
       <section className="section">
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="label-chip label-chip-blue" style={{ marginBottom: '.85rem' }}>
-              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'currentColor', opacity: .6 }} />
-              11 Specialised Services
-            </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.7rem,3.5vw,2.4rem)', fontWeight: 900, color: 'var(--slate-900)' }}>
-              Digital Media Solutions
-            </h2>
-          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.15rem' }} className="services-4col">
-            {services.map((s, i) => (
-              <motion.div
-                key={s.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: i * .055, duration: .45 }}
-                whileHover={{ y: -6, transition: { duration: .2 } }}
-                style={{
-                  background: 'var(--white)',
-                  border: '1px solid var(--slate-200)',
-                  borderRadius: 'var(--radius-xl)',
-                  padding: '1.75rem 1.5rem',
-                  cursor: 'default',
-                  transition: 'box-shadow .25s, border-color .25s',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-                className="service-card-hover"
-              >
-                <div style={{
-                  width: '52px', height: '52px', borderRadius: '14px',
-                  background: `linear-gradient(135deg, ${s.color[0]}, ${s.color[0]}CC)`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: s.color[1],
-                  marginBottom: '1.1rem',
-                  boxShadow: `0 4px 12px ${s.color[1]}22`,
-                  transition: 'transform .2s',
-                }}>
-                  {s.icon}
-                </div>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '.975rem', fontWeight: 800, color: 'var(--slate-900)', lineHeight: 1.3 }}>
-                  {s.name}
-                </h3>
-              </motion.div>
-            ))}
-
-            {/* Placeholder 12th card = CTA */}
+          {serviceGroups.map((group, gi) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              key={group.key}
+              initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: .65 }}
-              style={{
-                background: 'var(--g-blue)',
-                borderRadius: 'var(--radius-xl)',
-                padding: '1.75rem 1.5rem',
-                display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                boxShadow: 'var(--shadow-blue-lg)',
-              }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: .55, delay: gi * .08 }}
+              style={{ marginBottom: gi < serviceGroups.length - 1 ? '4.5rem' : 0 }}
             >
-              <p style={{ fontSize: '.9rem', fontWeight: 600, color: 'rgba(255,255,255,.9)', marginBottom: '1rem', lineHeight: 1.5 }}>
-                Need a custom media strategy?
-              </p>
-              <a href="#enquiry" className="btn btn-white btn-sm" style={{ display: 'inline-flex', width: 'fit-content' }}>
-                Get in Touch
-              </a>
+              {/* Group header */}
+              <div style={{
+                background: group.accentBg,
+                border: `1px solid ${group.accentBorder}`,
+                borderRadius: 'var(--radius-xl)',
+                padding: '1.5rem 2rem',
+                marginBottom: '1.75rem',
+                display: 'flex', alignItems: 'center', gap: '1.25rem',
+              }}>
+                <span style={{ fontSize: '2rem', lineHeight: 1 }}>{group.emoji}</span>
+                <div>
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.25rem,2.5vw,1.6rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.3rem' }}>
+                    {group.label}
+                  </h2>
+                  <p style={{ fontSize: '.9rem', color: 'var(--slate-500)', lineHeight: 1.6 }}>{group.desc}</p>
+                </div>
+              </div>
+
+              {/* Services grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(group.services.length, 4)}, 1fr)`, gap: '1.15rem' }}
+                className={`svc-group-grid svc-${group.key}`}>
+                {group.services.map((s, i) => (
+                  <motion.div
+                    key={s.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-30px' }}
+                    transition={{ delay: i * .06, duration: .42 }}
+                    whileHover={{ y: -6, transition: { duration: .2 } }}
+                    style={{
+                      background: 'var(--white)',
+                      border: '1px solid var(--slate-200)',
+                      borderRadius: 'var(--radius-xl)',
+                      padding: '1.75rem 1.5rem',
+                      cursor: 'default',
+                      transition: 'box-shadow .25s, border-color .25s',
+                      position: 'relative', overflow: 'hidden',
+                    }}
+                    className="service-card-hover"
+                  >
+                    <div style={{
+                      width: '52px', height: '52px', borderRadius: '14px',
+                      background: `linear-gradient(135deg, ${s.color[0]}, ${s.color[0]}CC)`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: s.color[1],
+                      marginBottom: '1.1rem',
+                      boxShadow: `0 4px 12px ${s.color[1]}22`,
+                      transition: 'transform .2s',
+                    }}>
+                      {s.icon}
+                    </div>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '.975rem', fontWeight: 800, color: 'var(--slate-900)', lineHeight: 1.3, marginBottom: '.55rem' }}>
+                      {s.name}
+                    </h3>
+                    <p style={{ fontSize: '.845rem', color: 'var(--slate-500)', lineHeight: 1.65 }}>
+                      {s.desc}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
-          </div>
+          ))}
         </div>
+
         <style>{`
-          .services-4col{grid-template-columns:repeat(4,1fr)!important;}
-          .service-card-hover:hover{box-shadow:var(--shadow-lg);border-color:rgba(29,78,216,.18)!important;}
-          @media(max-width:1100px){.services-4col{grid-template-columns:repeat(3,1fr)!important;}}
-          @media(max-width:700px){.services-4col{grid-template-columns:repeat(2,1fr)!important;}}
-          @media(max-width:440px){.services-4col{grid-template-columns:1fr!important;}}
+          .service-card-hover:hover{ box-shadow: var(--shadow-lg); border-color: rgba(29,78,216,.18)!important; }
+          .svc-mobile  { grid-template-columns: repeat(4,1fr)!important; }
+          .svc-location{ grid-template-columns: repeat(5,1fr)!important; }
+          .svc-social  { grid-template-columns: repeat(2,1fr)!important; }
+          @media(max-width:1100px){
+            .svc-mobile  { grid-template-columns: repeat(2,1fr)!important; }
+            .svc-location{ grid-template-columns: repeat(3,1fr)!important; }
+          }
+          @media(max-width:700px){
+            .svc-mobile,.svc-location,.svc-social{ grid-template-columns: repeat(2,1fr)!important; }
+          }
+          @media(max-width:440px){
+            .svc-mobile,.svc-location,.svc-social{ grid-template-columns: 1fr!important; }
+          }
         `}</style>
       </section>
 
-      {/* Enquiry */}
+      {/* ── ENQUIRY SECTION ───────────────────────────────────── */}
       <section className="section section--alt" id="enquiry">
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'start' }} className="enquiry-grid">
+
             {/* Left */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>Get in Touch</div>
@@ -135,9 +229,9 @@ export default function Services() {
                 Kindly fill up the form and we shall revert to you within <strong>48 hours</strong>.
               </p>
               {[
-                { icon: <Clock size={16} />, title: '48-Hour Response', sub: 'Guaranteed reply on all enquiries' },
-                { icon: <Phone size={16} />, title: 'Call Us', sub: <a href="tel:02266661314" style={{ color: 'var(--blue-400)', fontWeight: 700 }}>022-66661314</a> },
-                { icon: <Mail size={16} />, title: 'Email Us', sub: <a href="mailto:info@3hdmedia.com" style={{ color: 'var(--blue-400)', fontWeight: 700 }}>info@3hdmedia.com</a> },
+                { icon: <Clock size={16} />,  title: '48-Hour Response', sub: 'Guaranteed reply on all enquiries' },
+                { icon: <Phone size={16} />,  title: 'Call Us',          sub: <a href="tel:02266661314" style={{ color: 'var(--blue-400)', fontWeight: 700 }}>022-66661314</a> },
+                { icon: <Mail size={16} />,   title: 'Email Us',         sub: <a href="mailto:info@3hdmedia.com" style={{ color: 'var(--blue-400)', fontWeight: 700 }}>info@3hdmedia.com</a> },
               ].map(item => (
                 <div key={item.title} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', marginBottom: '1.15rem' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--g-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0, boxShadow: 'var(--shadow-blue)' }}>
