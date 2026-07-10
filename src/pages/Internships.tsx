@@ -35,6 +35,42 @@ const applyFields = [
   { name: 'message',       label: 'Tell Us About Yourself', placeholder: 'Share your interests and what you hope to gain…', required: true, type: 'textarea' },
 ]
 
+/* ── Minimal CSS Collaboration illustration ─────────────────── */
+function CollabIllustration() {
+  return (
+    <div style={{
+      width: '100%',
+      maxWidth: '320px',
+      height: '180px',
+      background: 'linear-gradient(135deg, rgba(11,63,160,.03), rgba(42,169,242,.08))',
+      border: '1px dashed rgba(11,63,160,.2)',
+      borderRadius: '20px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+      margin: '1.5rem auto 0',
+      overflow: 'hidden',
+    }}>
+      {/* Network Nodes */}
+      <div style={{ position: 'absolute', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(42,169,242,.1)', top: '15px', left: '15px' }} />
+      <div style={{ position: 'absolute', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(232,115,95,.08)', bottom: '20px', right: '30px' }} />
+
+      <div style={{ display: 'flex', gap: '1.5rem', zIndex: 1, alignItems: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '32px', marginBottom: '5px' }}>👥</div>
+          <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--slate-500)', textTransform: 'uppercase' }}>Active Mentoring</div>
+        </div>
+        <div style={{ fontSize: '20px', color: 'var(--blue-400)' }}>➔</div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '32px', marginBottom: '5px' }}>💼</div>
+          <div style={{ fontSize: '10px', fontWeight: '700', color: 'var(--slate-500)', textTransform: 'uppercase' }}>Live Projects</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Internships() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .4 }}>
@@ -48,9 +84,9 @@ export default function Internships() {
       {/* About section */}
       <section className="section">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start' }} className="int-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '5rem', alignItems: 'start' }} className="int-grid">
 
-            {/* Left */}
+            {/* Left Column */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>About the Programme</div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3.5vw,2.4rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.8rem' }}>
@@ -58,13 +94,13 @@ export default function Internships() {
               </h2>
               <div className="divider-blue" />
               <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '1.35rem' }}>
-                3HD Media offers Internships and Live Projects all over India for Undergraduates, Graduates, and Post Graduates in Marketing, Finance, Human Resources, Social Media, Advertising, Public Relations, Journalism, Events, Content writing, etc.
+                3HDMedia offers Internships and Live Projects all over India for Undergraduates, Graduates, and Post Graduates in Marketing, Finance, Human Resources, Social Media, Advertising, Public Relations, Journalism, Events, Content writing, etc.
               </p>
               <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '2rem' }}>
                 We have a team that constantly changes the projects and internships depending on the need of the hour and monitors the students who undertake such projects and internships.
               </p>
 
-              {/* Features */}
+              {/* Features list */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '.8rem', marginBottom: '2.25rem' }}>
                 {features.map((f, i) => (
                   <motion.div
@@ -86,12 +122,12 @@ export default function Internships() {
               <a href="#apply" className="btn btn-primary btn-lg">Apply for Internship</a>
             </motion.div>
 
-            {/* Right: disciplines + eligibility */}
+            {/* Right Column: tag list + illustration */}
             <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .1 }}>
               <p style={{ fontSize: '.78rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--slate-400)', marginBottom: '1.1rem' }}>
-                Internship Disciplines
+                Disciplines Offered
               </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.6rem', marginBottom: '2.5rem' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.6rem', marginBottom: '1.5rem' }}>
                 {disciplines.map(d => (
                   <span key={d.label} className="tag-pill">
                     {d.icon}
@@ -100,8 +136,11 @@ export default function Internships() {
                 ))}
               </div>
 
-              {/* Who can apply */}
-              <div style={{ background: 'linear-gradient(135deg, rgba(29,78,216,.05), rgba(96,165,250,.08))', border: '1px solid rgba(29,78,216,.12)', borderRadius: 'var(--radius-xl)', padding: '2rem' }}>
+              {/* Supporting Graphic */}
+              <CollabIllustration />
+
+              {/* Who can apply card */}
+              <div style={{ background: 'linear-gradient(135deg, rgba(11,63,160,.05), rgba(42,169,242,.08))', border: '1px solid rgba(11,63,160,.12)', borderRadius: 'var(--radius-xl)', padding: '2rem', marginTop: '2rem' }}>
                 <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '1.1rem' }}>
                   Who Can Apply?
                 </h4>
@@ -112,7 +151,7 @@ export default function Internships() {
                   'Students from anywhere in India',
                 ].map(item => (
                   <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '.65rem', marginBottom: '.7rem' }}>
-                    <Check size={17} style={{ color: 'var(--blue-400)', flexShrink: 0 }} />
+                    <Check size={17} style={{ color: 'var(--blue-500)', flexShrink: 0 }} />
                     <span style={{ fontSize: '.9rem', color: 'var(--slate-700)' }}>{item}</span>
                   </div>
                 ))}

@@ -1,34 +1,30 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence, useScroll } from 'framer-motion'
-import { Menu, X, ChevronDown, Briefcase, GraduationCap, Users } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import logo from '../assets/logo.png'
 
-const careersDropdown = [
-  { to: '/career',      label: 'Career',      icon: <Briefcase size={15} />,      sub: 'Job openings across all domains' },
-  { to: '/internships', label: 'Internships', icon: <GraduationCap size={15} />, sub: 'Live projects for students' },
-  { to: '/placements',  label: 'Placements',  icon: <Users size={15} />,          sub: 'Campus placement solutions' },
-]
-
-const mainLinks = [
-  { to: '/',        label: 'Home' },
-  { to: '/services', label: 'Services' },
-  { to: '/courses',  label: 'Courses' },
+const navLinks = [
+  { to: '/',            label: 'Home' },
+  { to: '/services',    label: 'Services' },
+  { to: '/courses',     label: 'Courses' },
+  { to: '/career',      label: 'Career' },
+  { to: '/internships', label: 'Internships' },
+  { to: '/placements',  label: 'Placements' },
+  { to: '/contact',     label: 'Contact Us' },
 ]
 
 export default function Header() {
   const [scrolled, setScrolled]             = useState(false)
   const [mobileOpen, setMobileOpen]         = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
-  const [dropOpen, setDropOpen]             = useState(false)
-  const dropRef                             = useRef<HTMLLIElement>(null)
   const { scrollY }                         = useScroll()
   const location                            = useLocation()
 
-  /* Close dropdown when route changes */
-  useEffect(() => { setDropOpen(false); setMobileOpen(false) }, [location.pathname])
+  /* Close mobile menu when route changes */
+  useEffect(() => { setMobileOpen(false) }, [location.pathname])
 
-  /* Scroll listener */
+  /* Scroll progress and background state listener */
   useEffect(() => {
     const unsub = scrollY.on('change', v => {
       setScrolled(v > 30)
@@ -38,24 +34,11 @@ export default function Header() {
     return unsub
   }, [scrollY])
 
-  /* Body lock on mobile menu */
+  /* Body scroll lock on mobile menu open */
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
-
-  /* Close dropdown on outside click */
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
-        setDropOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
-
-  const isCareerActive = ['/career', '/internships', '/placements'].includes(location.pathname)
 
   return (
     <>
@@ -75,10 +58,10 @@ export default function Header() {
           inset: '0 0 auto 0',
           zIndex: 1000,
           height: 'var(--nav-h)',
-          background: scrolled ? 'rgba(255,255,255,0.97)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(0,0,0,0.07)' : '1px solid transparent',
-          boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.08)' : 'none',
+          background: scrolled ? 'rgba(255,255,255,0.92)' : 'rgba(4, 13, 33, 0.35)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: scrolled ? '1px solid rgba(11, 63, 160, 0.08)' : '1px solid rgba(255,255,255,0.06)',
+          boxShadow: scrolled ? '0 8px 30px rgba(11, 63, 160, 0.04)' : 'none',
           transition: 'background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease',
         }}
       >
@@ -86,167 +69,65 @@ export default function Header() {
           {/* Logo */}
           <Link
             to="/"
-            style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
+            style={{ display: 'flex', alignItems: 'center', flexShrink: 0, transition: 'transform 0.3s ease' }}
             aria-label="3HD Media Home"
+            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.02)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
           >
             <img src={logo} alt="3HD Media" style={{ height: '62px', width: 'auto', objectFit: 'contain' }} />
           </Link>
 
           {/* Desktop nav */}
-          <ul style={{ display: 'flex', alignItems: 'center', gap: '.1rem', flex: 1, justifyContent: 'center' }} className="desktop-nav">
-            {mainLinks.map(link => (
-              <li key={link.to}>
+          <ul style={{ display: 'flex', alignItems: 'center', gap: '.2rem', flex: 1, justifyContent: 'center' }} className="desktop-nav">
+            {navLinks.map(link => (
+              <motion.li key={link.to} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <NavLink
                   to={link.to}
                   end={link.to === '/'}
                   style={({ isActive }) => ({
                     display: 'block',
-                    padding: '.45rem .8rem',
-                    fontSize: '.875rem',
-                    fontWeight: 500,
+                    padding: '.5rem .8rem',
+                    fontSize: '.86rem',
+                    fontWeight: 700,
                     color: isActive
-                      ? 'var(--blue-400)'
-                      : scrolled ? 'var(--slate-700)' : 'rgba(255,255,255,.85)',
-                    borderRadius: '8px',
-                    background: isActive ? (scrolled ? 'rgba(29,78,216,.07)' : 'rgba(255,255,255,.1)') : 'transparent',
-                    transition: 'color 0.25s, background 0.25s',
+                      ? 'var(--blue-600)'
+                      : scrolled ? 'var(--slate-700)' : 'rgba(255,255,255,.9)',
+                    borderRadius: '10px',
+                    background: isActive ? (scrolled ? 'rgba(11, 63, 160, 0.06)' : 'rgba(255, 255, 255, 0.12)') : 'transparent',
+                    border: isActive ? (scrolled ? '1px solid rgba(11, 63, 160, 0.1)' : '1px solid rgba(255, 255, 255, 0.15)') : '1px solid transparent',
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     whiteSpace: 'nowrap',
                   })}
                 >
                   {link.label}
                 </NavLink>
-              </li>
+              </motion.li>
             ))}
-
-            {/* Careers & Campus dropdown */}
-            <li ref={dropRef} style={{ position: 'relative' }}>
-              <button
-                onClick={() => setDropOpen(v => !v)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '.3rem',
-                  padding: '.45rem .8rem',
-                  fontSize: '.875rem',
-                  fontWeight: 500,
-                  color: isCareerActive
-                    ? 'var(--blue-400)'
-                    : scrolled ? 'var(--slate-700)' : 'rgba(255,255,255,.85)',
-                  borderRadius: '8px',
-                  background: isCareerActive ? (scrolled ? 'rgba(29,78,216,.07)' : 'rgba(255,255,255,.1)') : 'transparent',
-                  border: 'none', cursor: 'pointer',
-                  transition: 'color 0.25s, background 0.25s',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Careers & Campus
-                <motion.span
-                  animate={{ rotate: dropOpen ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ display: 'flex', alignItems: 'center' }}
-                >
-                  <ChevronDown size={14} />
-                </motion.span>
-              </button>
-
-              <AnimatePresence>
-                {dropOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6, scale: .97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: .97 }}
-                    transition={{ duration: 0.18 }}
-                    style={{
-                      position: 'absolute',
-                      top: 'calc(100% + 8px)',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      minWidth: '230px',
-                      background: 'white',
-                      borderRadius: '14px',
-                      boxShadow: '0 8px 40px rgba(0,0,0,.13)',
-                      border: '1px solid var(--slate-200)',
-                      padding: '.5rem',
-                      zIndex: 100,
-                    }}
-                  >
-                    {careersDropdown.map(item => (
-                      <NavLink
-                        key={item.to}
-                        to={item.to}
-                        style={({ isActive }) => ({
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '.75rem',
-                          padding: '.7rem .9rem',
-                          borderRadius: '10px',
-                          background: isActive ? 'var(--blue-10)' : 'transparent',
-                          color: isActive ? 'var(--blue-600)' : 'var(--slate-700)',
-                          transition: 'background .18s, color .18s',
-                        })}
-                        className="dropdown-item"
-                      >
-                        <div style={{
-                          width: '32px', height: '32px', borderRadius: '8px',
-                          background: 'linear-gradient(135deg, rgba(29,78,216,.08), rgba(96,165,250,.13))',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: 'var(--blue-500)', flexShrink: 0,
-                        }}>
-                          {item.icon}
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 600, fontSize: '.875rem', lineHeight: 1 }}>{item.label}</div>
-                          <div style={{ fontSize: '.75rem', color: 'var(--slate-400)', marginTop: '.18rem' }}>{item.sub}</div>
-                        </div>
-                      </NavLink>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </li>
-
-            <li>
-              <NavLink
-                to="/contact"
-                style={({ isActive }) => ({
-                  display: 'block',
-                  padding: '.45rem .8rem',
-                  fontSize: '.875rem',
-                  fontWeight: 500,
-                  color: isActive
-                    ? 'var(--blue-400)'
-                    : scrolled ? 'var(--slate-700)' : 'rgba(255,255,255,.85)',
-                  borderRadius: '8px',
-                  background: isActive ? (scrolled ? 'rgba(29,78,216,.07)' : 'rgba(255,255,255,.1)') : 'transparent',
-                  transition: 'color 0.25s, background 0.25s',
-                  whiteSpace: 'nowrap',
-                })}
-              >
-                Contact Us
-              </NavLink>
-            </li>
           </ul>
 
-          {/* CTA + hamburger */}
+          {/* CTA & Mobile Toggle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem', flexShrink: 0 }}>
-            <Link to="/contact" className="btn btn-primary btn-sm" style={{ whiteSpace: 'nowrap' }}>
-              Request a Proposal
+            <Link to="/contact" className="btn btn-primary btn-sm" style={{ whiteSpace: 'nowrap', borderRadius: '10px' }}>
+              Get in Touch
             </Link>
             <button
               onClick={() => setMobileOpen(v => !v)}
               style={{
                 display: 'none',
                 border: 'none',
-                background: 'none',
+                background: scrolled ? 'rgba(11, 63, 160, 0.05)' : 'rgba(255, 255, 255, 0.1)',
                 cursor: 'pointer',
-                padding: '.45rem',
-                borderRadius: '8px',
+                padding: '.5rem',
+                borderRadius: '10px',
                 color: scrolled ? 'var(--slate-800)' : 'white',
                 alignItems: 'center',
+                transition: 'all 0.2s',
               }}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
               className="mobile-toggle"
             >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </nav>
@@ -265,23 +146,23 @@ export default function Header() {
               top: 'var(--nav-h)',
               left: 0,
               right: 0,
-              background: 'rgba(255,255,255,0.98)',
-              backdropFilter: 'blur(16px)',
-              borderBottom: '1px solid var(--slate-200)',
-              boxShadow: '0 8px 40px rgba(0,0,0,.12)',
+              background: 'rgba(255, 255, 255, 0.98)',
+              backdropFilter: 'blur(24px)',
+              borderBottom: '1px solid rgba(11, 63, 160, 0.08)',
+              boxShadow: '0 12px 40px rgba(11, 63, 160, 0.08)',
               zIndex: 999,
-              padding: '1.25rem 1.5rem 1.5rem',
+              padding: '1.25rem 1.5rem 1.75rem',
               maxHeight: 'calc(100vh - var(--nav-h))',
               overflowY: 'auto',
             }}
           >
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '.2rem' }}>
-              {[...mainLinks, { to: '/contact', label: 'Contact Us' }].map((link, i) => (
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '.3rem' }}>
+              {navLinks.map((link, i) => (
                 <motion.li
                   key={link.to}
-                  initial={{ opacity: 0, x: -12 }}
+                  initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{ delay: i * 0.04 }}
                 >
                   <NavLink
                     to={link.to}
@@ -289,13 +170,14 @@ export default function Header() {
                     onClick={() => setMobileOpen(false)}
                     style={({ isActive }) => ({
                       display: 'block',
-                      padding: '.85rem 1.1rem',
-                      fontSize: '1rem',
-                      fontWeight: 500,
-                      color: isActive ? 'var(--blue-500)' : 'var(--slate-700)',
-                      background: isActive ? 'var(--blue-10)' : 'transparent',
-                      borderRadius: '10px',
-                      transition: 'all .2s',
+                      padding: '.85rem 1.25rem',
+                      fontSize: '1.025rem',
+                      fontWeight: 700,
+                      color: isActive ? 'var(--blue-600)' : 'var(--slate-700)',
+                      background: isActive ? 'rgba(11, 63, 160, 0.05)' : 'transparent',
+                      borderRadius: '12px',
+                      transition: 'all .25s ease',
+                      border: isActive ? '1px solid rgba(11, 63, 160, 0.08)' : '1px solid transparent',
                     })}
                   >
                     {link.label}
@@ -303,41 +185,9 @@ export default function Header() {
                 </motion.li>
               ))}
 
-              {/* Mobile Careers group */}
-              <motion.li
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: mainLinks.length * 0.05 }}
-                style={{ marginTop: '.5rem' }}
-              >
-                <div style={{ padding: '.45rem 1.1rem .35rem', fontSize: '.72rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--slate-400)' }}>
-                  Careers & Campus
-                </div>
-                {careersDropdown.map((item, j) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setMobileOpen(false)}
-                    style={({ isActive }) => ({
-                      display: 'flex', alignItems: 'center', gap: '.65rem',
-                      padding: '.7rem 1.1rem',
-                      fontSize: '.95rem',
-                      fontWeight: 500,
-                      color: isActive ? 'var(--blue-500)' : 'var(--slate-700)',
-                      background: isActive ? 'var(--blue-10)' : 'transparent',
-                      borderRadius: '10px',
-                      transition: 'all .2s',
-                    })}
-                  >
-                    <span style={{ color: 'var(--slate-400)' }}>{item.icon}</span>
-                    {item.label}
-                  </NavLink>
-                ))}
-              </motion.li>
-
-              <li style={{ marginTop: '.75rem' }}>
-                <Link to="/contact" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => setMobileOpen(false)}>
-                  Request a Proposal
+              <li style={{ marginTop: '1rem' }}>
+                <Link to="/contact" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', borderRadius: '12px' }} onClick={() => setMobileOpen(false)}>
+                  Get in Touch
                 </Link>
               </li>
             </ul>
@@ -352,10 +202,6 @@ export default function Header() {
         }
         @media (min-width: 1051px) {
           .mobile-toggle { display: none !important; }
-        }
-        .dropdown-item:hover {
-          background: var(--blue-10) !important;
-          color: var(--blue-600) !important;
         }
       `}</style>
     </>

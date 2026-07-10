@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 interface PageHeroProps {
   eyebrow: string
   title: string
-  subtitle?: string
+  subtitle?: React.ReactNode
   breadcrumb?: string
 }
 

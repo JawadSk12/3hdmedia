@@ -11,12 +11,12 @@ const formats = [
 ]
 
 const topics = [
-  { icon: <BookOpen size={15} />, text: 'Introduction to Social Media',             sub: 'Foundations, platforms, and digital landscape overview' },
-  { icon: <Target size={15} />,   text: 'Creating a Social Media Strategy',          sub: 'Goal-setting, audience targeting, and campaign planning' },
-  { icon: <PieChart size={15} />, text: 'Understanding Paid, Earned & Owned Social Media', sub: 'The three pillars of a complete social media presence' },
-  { icon: <Share2 size={15} />,   text: 'Social Sharing',                           sub: 'Virality, engagement, and content distribution tactics' },
-  { icon: <Edit3 size={15} />,    text: 'Blogging for Business',                    sub: 'SEO writing, content calendars, and brand storytelling' },
-  { icon: <Users size={15} />,    text: 'Finding & Communicating with Influencers', sub: 'Identifying, outreaching, and collaborating with influencers' },
+  { icon: <BookOpen size={16} />, text: 'Introduction to Social Media',             sub: 'Foundations, platforms, and digital landscape overview', color: 'var(--accent-coral)' },
+  { icon: <Target size={16} />,   text: 'Creating a Social Media Strategy',          sub: 'Goal-setting, audience targeting, and campaign planning', color: 'var(--blue-500)' },
+  { icon: <PieChart size={16} />, text: 'Understanding Paid, Earned, and Owned Social Media', sub: 'The three pillars of a complete social media presence', color: 'var(--accent-teal)' },
+  { icon: <Share2 size={16} />,   text: 'Social Sharing',                           sub: 'Virality, engagement, and content distribution tactics', color: 'var(--accent-magenta)' },
+  { icon: <Edit3 size={16} />,    text: 'Blogging for Business',                    sub: 'SEO writing, content calendars, and brand storytelling', color: 'var(--accent-green)' },
+  { icon: <Users size={16} />,    text: 'Finding & Communicating with Influencers', sub: 'Identifying, outreaching, and collaborating with influencers', color: 'var(--blue-600)' },
 ]
 
 const courseFields = [
@@ -45,7 +45,7 @@ export default function Courses() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'start', marginBottom: '5rem' }} className="course-grid">
 
-            {/* Left */}
+            {/* Left Column */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>Programme Details</div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3.5vw,2.3rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.8rem' }}>
@@ -53,17 +53,12 @@ export default function Courses() {
               </h2>
               <div className="divider-blue" />
               <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '1.35rem' }}>
-                3HD Media offers Part-Time, Full-time and special weekend Certification courses in Social Media. We also offer special in-house training that incorporates during or after working hours.
+                3HDMedia offers Part-Time, Full-time and special weekend Certification courses in Social Media. We also offer special in-house training that incorporates during or after working hours. Duration of the Training: The duration and fee structure will depend on the topics selected. The topics covered will be the following.
               </p>
-              <div style={{ background: 'var(--blue-10)', border: '1px solid var(--blue-50)', borderLeft: '4px solid var(--blue-400)', borderRadius: '0 var(--radius-md) var(--radius-md) 0', padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
-                <p style={{ fontSize: '.95rem', color: 'var(--slate-700)', lineHeight: 1.7 }}>
-                  <strong>Duration & Fee Structure:</strong> The duration and fee structure will depend on the topics selected. Contact us to discuss a customised learning plan tailored to your goals.
-                </p>
-              </div>
               <a href="#course-enquiry" className="btn btn-primary btn-lg">Enquire About Courses</a>
             </motion.div>
 
-            {/* Right: format cards */}
+            {/* Right Column: format cards */}
             <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .1 }}>
               <div className="grid-2" style={{ gap: '1rem' }}>
                 {formats.map((f, i) => (
@@ -107,7 +102,19 @@ export default function Courses() {
                 transition={{ delay: i * .07 }}
                 className="check-item"
               >
-                <div className="check-icon">{t.icon}</div>
+                <div style={{
+                  width: '32px', height: '32px',
+                  borderRadius: '50%',
+                  background: `${t.color}15`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  color: t.color,
+                  boxShadow: `0 2px 6px ${t.color}20`
+                }}>
+                  {t.icon}
+                </div>
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--slate-900)', fontSize: '.975rem' }}>{t.text}</div>
                   <div style={{ fontSize: '.82rem', color: 'var(--slate-500)', marginTop: '.2rem' }}>{t.sub}</div>
@@ -117,12 +124,12 @@ export default function Courses() {
           </div>
 
           {/* Included in all batches */}
-          <div style={{ marginTop: '3rem', background: 'linear-gradient(135deg, rgba(29,78,216,.05), rgba(96,165,250,.08))', border: '1px solid rgba(29,78,216,.12)', borderRadius: 'var(--radius-xl)', padding: '2rem', maxWidth: '900px', margin: '3rem auto 0' }}>
+          <div style={{ marginTop: '3rem', background: 'linear-gradient(135deg, rgba(11,63,160,.05), rgba(42,169,242,.08))', border: '1px solid rgba(11,63,160,.12)', borderRadius: 'var(--radius-xl)', padding: '2rem', maxWidth: '900px', margin: '3rem auto 0' }}>
             <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '1rem', fontSize: '1rem' }}>Included in All Batches</h4>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '.7rem' }} className="includes-grid">
               {['Certification on Completion', 'Expert Faculty', 'Live Case Studies', 'Industry Projects', 'Post-Course Support', 'Placement Guidance'].map(item => (
                 <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '.55rem' }}>
-                  <Check size={15} style={{ color: 'var(--blue-400)', flexShrink: 0 }} />
+                  <Check size={15} style={{ color: 'var(--blue-500)', flexShrink: 0 }} />
                   <span style={{ fontSize: '.87rem', color: 'var(--slate-700)', fontWeight: 500 }}>{item}</span>
                 </div>
               ))}
@@ -131,7 +138,7 @@ export default function Courses() {
         </div>
         <style>{`
           .course-grid,.int-grid{grid-template-columns:1fr 1fr!important;}
-          .format-hover:hover{box-shadow:var(--shadow-lg);border-color:rgba(29,78,216,.2)!important;}
+          .format-hover:hover{box-shadow:var(--shadow-lg);border-color:rgba(11,63,160,.2)!important;}
           @media(max-width:900px){.course-grid{grid-template-columns:1fr!important;}}
           @media(max-width:640px){.includes-grid{grid-template-columns:1fr!important;}}
         `}</style>
@@ -146,7 +153,7 @@ export default function Courses() {
               Course Enquiry
             </h2>
             <p style={{ fontSize: '.975rem', color: 'var(--slate-500)' }}>
-              Kindly fill up the form and we shall revert to you within <strong>48 hours</strong>.
+              Kindly fill-up the form below and we shall revert to you within 48 hours
             </p>
           </div>
           <div style={{ maxWidth: '680px', margin: '0 auto' }}>

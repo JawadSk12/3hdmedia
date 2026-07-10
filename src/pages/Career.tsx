@@ -4,17 +4,17 @@ import PageHero from '../components/PageHero'
 
 const jobs = [
   { icon: <Code2 size={20} />,       title: 'Technical (IT)',      sub: 'Web, app, and digital infrastructure roles',        color: 'var(--blue-500)' },
-  { icon: <TrendingUp size={20} />,  title: 'Sales',               sub: 'Business development and client acquisition',        color: '#16A34A' },
-  { icon: <Megaphone size={20} />,   title: 'Marketing',           sub: 'Digital campaigns, brand and social strategy',       color: '#D97706' },
+  { icon: <TrendingUp size={20} />,  title: 'Sales',               sub: 'Business development and client acquisition',        color: 'var(--accent-teal)' },
+  { icon: <Megaphone size={20} />,   title: 'Marketing',           sub: 'Digital campaigns, brand and social strategy',       color: 'var(--accent-magenta)' },
   { icon: <Landmark size={20} />,    title: 'Finance',             sub: 'Accounting, analysis, and financial planning',       color: '#9333EA' },
   { icon: <Headphones size={20} />,  title: 'Client Servicing',    sub: 'Account management and client success',              color: '#0891B2' },
-  { icon: <PenLine size={20} />,     title: 'Journalism',          sub: 'Content creation, reporting, and digital media',     color: '#DB2777' },
+  { icon: <PenLine size={20} />,     title: 'Journalism',          sub: 'Content creation, reporting, and digital media',     color: 'var(--accent-coral)' },
   { icon: <Zap size={20} />,         title: 'Excitement Manager',  sub: 'Energy, events, and brand experience',               color: '#EF4444' },
 ]
 
 const stats = [
   { num: '₹5K Cr+', label: 'Current Industry Size' },
-  { num: '2×',      label: 'Expected Growth by 2024' },
+  { num: '2× Growth', label: 'Expected Size by 2024' },
   { num: 'Top 3',   label: "India's Fastest-Growing Sector" },
 ]
 
@@ -30,9 +30,9 @@ export default function Career() {
 
       <section className="section">
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'start' }} className="career-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1.12fr 0.88fr', gap: '5rem', alignItems: 'start' }} className="career-grid">
 
-            {/* Left */}
+            {/* Left Column */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>Opportunity Awaits</div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3.5vw,2.4rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.8rem' }}>
@@ -51,7 +51,7 @@ export default function Career() {
               </p>
 
               <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '2rem' }}>
-                So come join us — we have various openings in the following categories. We also accept freshers for all the below mentioned job categories, so what are you waiting for? Call us for an appointment.
+                So come join us — we have various openings in the following categories. We also accept freshers for all the below mentioned job categories, so what are you waiting for? Call us for an appointment on <a href="tel:02266661314" style={{ fontWeight: 700, color: 'var(--blue-600)', borderBottom: '1px dashed currentColor' }}>022-66661314</a>.
               </p>
 
               {/* Stats */}
@@ -67,7 +67,7 @@ export default function Career() {
               {/* Freshers badge */}
               <div style={{ background: 'rgba(34,197,94,.07)', border: '1px solid rgba(34,197,94,.2)', borderRadius: 'var(--radius-lg)', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '.75rem', marginBottom: '2rem' }}>
                 <CheckCircle size={20} style={{ color: '#16A34A', flexShrink: 0 }} />
-                <p style={{ fontSize: '.9rem', fontWeight: 600, color: '#166534' }}>Freshers are welcome for <em>all</em> the above categories!</p>
+                <p style={{ fontSize: '.9rem', fontWeight: 600, color: '#166534' }}>Freshers are welcome for <em>all</em> the job categories listed!</p>
               </div>
 
               <div style={{ display: 'flex', gap: '.75rem', flexWrap: 'wrap' }}>
@@ -81,10 +81,10 @@ export default function Career() {
               </div>
             </motion.div>
 
-            {/* Right: job cards */}
+            {/* Right Column: job categories tags/grid */}
             <div>
               <p style={{ fontSize: '.78rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--slate-400)', marginBottom: '1.1rem' }}>
-                Open Categories
+                Job Categories
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '.8rem' }}>
                 {jobs.map((job, i) => (
@@ -106,7 +106,7 @@ export default function Career() {
                     }}
                     className="job-card-hover"
                   >
-                    <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: `${job.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: job.color, flexShrink: 0 }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: `${job.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: job.color, flexShrink: 0 }}>
                       {job.icon}
                     </div>
                     <div>
@@ -120,13 +120,13 @@ export default function Career() {
           </div>
         </div>
         <style>{`
-          .career-grid{grid-template-columns:1fr 1fr!important;}
-          .job-card-hover:hover{box-shadow:var(--shadow-md);border-color:rgba(29,78,216,.15)!important;}
+          .career-grid{grid-template-columns:1.12fr 0.88fr!important;}
+          .job-card-hover:hover{box-shadow:var(--shadow-md);border-color:rgba(11,63,160,.15)!important;}
           @media(max-width:900px){.career-grid{grid-template-columns:1fr!important;}}
         `}</style>
       </section>
 
-      {/* CTA */}
+      {/* CTA Section */}
       <section className="cta-section">
         <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>

@@ -38,12 +38,12 @@ export default function Placements() {
         breadcrumb="Placements"
       />
 
-      {/* Main */}
+      {/* Main content */}
       <section className="section">
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'start', marginBottom: '5rem' }} className="plc-grid">
 
-            {/* Left */}
+            {/* Left Column */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>The Challenge & Our Solution</div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3.5vw,2.4rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.8rem' }}>
@@ -51,16 +51,10 @@ export default function Placements() {
               </h2>
               <div className="divider-blue" />
               <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '1.25rem' }}>
-                These days, getting students placed is the biggest problem faced by colleges, and this is because of the enormous competition existing in the corporate world.
-              </p>
-              <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '1.25rem' }}>
-                Hence, 3HD Media has created a solution for all colleges across India. 3HD Media has a special team dedicated to final placements for MBA students across all specializations.
-              </p>
-              <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '2.25rem' }}>
-                This team liaises with various HR personnel from the corporate world and makes sure they attend the campus placements of the colleges who register with us for a particular fee.
+                These days, getting students placed is the biggest problem faced by colleges, and this is because of the enormous competition existing in the corporate world. Hence, 3HD Media has created a solution for all colleges across India. 3HD Media has a special team dedicated to final placements for MBA students across all specializations. This team liaises with various HR personnel from the corporate world and makes sure they attend the campus placements of the colleges who register with us for a particular fee. In case of any clarification, please call <a href="tel:9820108341" style={{ fontWeight: 700, color: 'var(--blue-600)', borderBottom: '1px dashed currentColor' }}>9820108341</a>.
               </p>
 
-              <div style={{ display: 'flex', gap: '.75rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '.75rem', flexWrap: 'wrap', marginTop: '2rem' }}>
                 <a href="#placement-form" className="btn btn-primary btn-lg">Register Your College</a>
                 <a href="tel:9820108341" className="btn btn-outline btn-lg" style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem' }}>
                   <Phone size={17} />9820108341
@@ -68,7 +62,7 @@ export default function Placements() {
               </div>
             </motion.div>
 
-            {/* Right: how it works */}
+            {/* Right Column: how it works */}
             <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .1 }}>
               <p style={{ fontSize: '.78rem', fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--slate-400)', marginBottom: '1.1rem' }}>How It Works</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '.9rem' }}>
@@ -124,12 +118,12 @@ export default function Placements() {
         </div>
         <style>{`
           .plc-grid{grid-template-columns:1fr 1fr!important;}
-          .benefit-hover:hover{box-shadow:var(--shadow-lg);border-color:rgba(29,78,216,.15)!important;}
+          .benefit-hover:hover{box-shadow:var(--shadow-lg);border-color:rgba(11,63,160,.15)!important;}
           @media(max-width:900px){.plc-grid{grid-template-columns:1fr!important;}}
         `}</style>
       </section>
 
-      {/* Form */}
+      {/* Form section */}
       <section className="section section--alt" id="placement-form">
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -137,8 +131,11 @@ export default function Placements() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3.5vw,2.3rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.6rem' }}>
               Register Your College
             </h2>
-            <p style={{ fontSize: '.975rem', color: 'var(--slate-500)' }}>
-              Fill up this form and we shall get back to you shortly. For clarifications, call{' '}
+            <p style={{ fontSize: '.975rem', color: 'var(--slate-500)', marginBottom: '1rem' }}>
+              Those colleges interested, please fill up this form and we shall get back to you shortly.
+            </p>
+            <p style={{ fontSize: '.875rem', color: 'var(--slate-500)' }}>
+              In case of any clarification, please call{' '}
               <a href="tel:9820108341" style={{ color: 'var(--blue-500)', fontWeight: 700 }}>9820108341</a>.
             </p>
           </div>
@@ -152,7 +149,7 @@ export default function Placements() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* Placements CTA */}
       <section className="cta-section">
         <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>

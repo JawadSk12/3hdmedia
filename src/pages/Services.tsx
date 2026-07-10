@@ -2,10 +2,19 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Smartphone, Wifi, Globe, Mic, MapPin, Rocket, Video, MonitorPlay,
-  Bluetooth, Share2, Mail, Clock, Phone,
+  Bluetooth, Mail, Clock, Phone,
 } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import ContactForm from '../components/ContactForm'
+
+/* ── Custom Social SVGs for Card Icons ──────────────────────── */
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <circle cx="12" cy="12" r="5"/>
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+)
 
 /* ── Service data grouped into 3 categories ─────────────────── */
 const serviceGroups = [
@@ -14,28 +23,28 @@ const serviceGroups = [
     emoji:    '🎬',
     label:    'Mobile & Video Advertising',
     desc:     'High-impact video-first ad formats delivered to audiences wherever they are.',
-    accentBg: 'rgba(37,99,235,.06)',
-    accentBorder: 'rgba(37,99,235,.14)',
+    accentBg: 'rgba(28,114,220,.05)',
+    accentBorder: 'rgba(28,114,220,.12)',
     services: [
       {
         icon: <MonitorPlay size={22} />, name: 'Mobile Video Streaming',
         desc: 'Stream targeted video ads directly to mobile audiences at scale across India.',
-        color: ['#EBF8FF', '#1565C7'],
+        color: ['#EFF6FF', 'var(--blue-600)'],
       },
       {
         icon: <Video size={22} />, name: 'Video SMS',
         desc: 'Send engaging video messages via SMS — a direct and impactful mobile channel.',
-        color: ['#EFF6FF', '#2563EB'],
+        color: ['#F0FDF4', 'var(--accent-green)'],
       },
       {
         icon: <Mail size={22} />, name: 'Video Emails',
         desc: 'Embed rich video content inside email campaigns for superior engagement rates.',
-        color: ['#F5F3FF', '#7C3AED'],
+        color: ['#FDF4FF', 'var(--accent-magenta)'],
       },
       {
         icon: <Smartphone size={22} />, name: 'Mobile Video Training',
         desc: 'Educate and onboard your audience with mobile-optimised video training content.',
-        color: ['#F0FDF4', '#15803D'],
+        color: ['#FFFBEB', 'var(--accent-coral)'],
       },
     ],
   },
@@ -44,33 +53,33 @@ const serviceGroups = [
     emoji:    '📡',
     label:    'Location & Network Advertising',
     desc:     'Reach audiences based on where they are — through WiFi, internet, Bluetooth, and proximity signals.',
-    accentBg: 'rgba(22,163,74,.05)',
-    accentBorder: 'rgba(22,163,74,.13)',
+    accentBg: 'rgba(20,184,166,.05)',
+    accentBorder: 'rgba(20,184,166,.12)',
     services: [
       {
         icon: <Wifi size={22} />, name: 'WiFi Advertising',
         desc: 'Serve targeted ads to users connecting via public and private WiFi hotspots.',
-        color: ['#F0FDF4', '#16A34A'],
+        color: ['#F0FDFA', 'var(--accent-teal)'],
       },
       {
         icon: <Globe size={22} />, name: 'Internet Advertising',
-        desc: 'Display and native ad placements across India\'s largest internet ad networks.',
-        color: ['#FFF7ED', '#EA580C'],
+        desc: "Display and native ad placements across India's largest internet ad networks.",
+        color: ['#EFF6FF', 'var(--blue-500)'],
       },
       {
         icon: <Bluetooth size={22} />, name: 'Bluetooth Advertising',
         desc: 'Proximity marketing via Bluetooth beacons — engage customers in-store and on-site.',
-        color: ['#EFF9FF', '#0891B2'],
+        color: ['#F0FDF4', 'var(--accent-green)'],
       },
       {
         icon: <MapPin size={22} />, name: 'Location Advertising',
         desc: 'Hyper-local geo-targeted campaigns to reach the right people in the right place.',
-        color: ['#FFF1F2', '#E11D48'],
+        color: ['#FFF1F2', 'var(--accent-coral)'],
       },
       {
         icon: <Mic size={22} />, name: 'Regional Voice SMS',
         desc: 'Voice message broadcasts in regional languages — for broad, local audience reach.',
-        color: ['#FDF4FF', '#9333EA'],
+        color: ['#FFF5F5', '#E53E3E'],
       },
     ],
   },
@@ -79,18 +88,18 @@ const serviceGroups = [
     emoji:    '📣',
     label:    'Social & Campaign Services',
     desc:     'Brand-building and launch campaigns powered by social media and experiential marketing.',
-    accentBg: 'rgba(219,39,119,.05)',
-    accentBorder: 'rgba(219,39,119,.13)',
+    accentBg: 'rgba(236,72,153,.05)',
+    accentBorder: 'rgba(236,72,153,.12)',
     services: [
       {
-        icon: <Share2 size={22} />, name: 'Social Media',
+        icon: <InstagramIcon />, name: 'Social Media',
         desc: 'Comprehensive social media management and paid advertising on all major platforms.',
-        color: ['#FFF1F2', '#DB2777'],
+        color: ['#FFF1F2', 'var(--accent-magenta)'],
       },
       {
         icon: <Rocket size={22} />, name: 'Product Launches',
         desc: 'End-to-end campaign planning and execution for impactful product launch moments.',
-        color: ['#FFFBEB', '#D97706'],
+        color: ['#FFFDF5', '#D97706'],
       },
     ],
   },
@@ -109,12 +118,22 @@ const enquiryFields = [
 ]
 
 export default function Services() {
+  const subtitleNode = (
+    <span>
+      Our{' '}
+      <span style={{ color: 'var(--accent-coral)', fontWeight: 700 }}>experienced</span>
+      {' '}and{' '}
+      <span style={{ color: 'var(--accent-teal)', fontWeight: 700 }}>dedicated</span>
+      {' '}staff provide the following services with a smile.
+    </span>
+  )
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .4 }}>
       <PageHero
         eyebrow="What We Do"
         title="Our Services"
-        subtitle='Our experienced and dedicated staff provide the following services with a smile.'
+        subtitle={subtitleNode}
         breadcrumb="Services"
       />
 
@@ -196,7 +215,7 @@ export default function Services() {
         </div>
 
         <style>{`
-          .service-card-hover:hover{ box-shadow: var(--shadow-lg); border-color: rgba(29,78,216,.18)!important; }
+          .service-card-hover:hover{ box-shadow: var(--shadow-lg); border-color: rgba(11,63,160,.18)!important; }
           .svc-mobile  { grid-template-columns: repeat(4,1fr)!important; }
           .svc-location{ grid-template-columns: repeat(5,1fr)!important; }
           .svc-social  { grid-template-columns: repeat(2,1fr)!important; }
@@ -218,7 +237,7 @@ export default function Services() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'start' }} className="enquiry-grid">
 
-            {/* Left */}
+            {/* Left Column */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>Get in Touch</div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3vw,2.2rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.8rem' }}>
@@ -226,12 +245,12 @@ export default function Services() {
               </h2>
               <div className="divider-blue" />
               <p style={{ fontSize: '.975rem', color: 'var(--slate-500)', lineHeight: 1.8, marginBottom: '2rem' }}>
-                Kindly fill up the form and we shall revert to you within <strong>48 hours</strong>.
+                Kindly fill-up the form below and we shall revert to you within 48 hours
               </p>
               {[
                 { icon: <Clock size={16} />,  title: '48-Hour Response', sub: 'Guaranteed reply on all enquiries' },
-                { icon: <Phone size={16} />,  title: 'Call Us',          sub: <a href="tel:02266661314" style={{ color: 'var(--blue-400)', fontWeight: 700 }}>022-66661314</a> },
-                { icon: <Mail size={16} />,   title: 'Email Us',         sub: <a href="mailto:info@3hdmedia.com" style={{ color: 'var(--blue-400)', fontWeight: 700 }}>info@3hdmedia.com</a> },
+                { icon: <Phone size={16} />,  title: 'Call Us',          sub: <a href="tel:02266661314" style={{ color: 'var(--blue-600)', fontWeight: 700 }}>022-66661314</a> },
+                { icon: <Mail size={16} />,   title: 'Email Us',         sub: <a href="mailto:info@3hdmedia.com" style={{ color: 'var(--blue-600)', fontWeight: 700 }}>info@3hdmedia.com</a> },
               ].map(item => (
                 <div key={item.title} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', marginBottom: '1.15rem' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--g-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0, boxShadow: 'var(--shadow-blue)' }}>
@@ -254,7 +273,7 @@ export default function Services() {
               </div>
             </motion.div>
 
-            {/* Right: form */}
+            {/* Right Column: form */}
             <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .1 }}>
               <div style={{ background: 'var(--white)', border: '1px solid var(--slate-200)', borderRadius: 'var(--radius-xl)', padding: '2.25rem', boxShadow: 'var(--shadow-md)' }}>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '.4rem' }}>
