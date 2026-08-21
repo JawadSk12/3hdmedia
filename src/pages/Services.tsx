@@ -1,294 +1,296 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import {
-  Smartphone, Wifi, Globe, Mic, MapPin, Rocket, Video, MonitorPlay,
-  Bluetooth, Mail, Clock, Phone,
-} from 'lucide-react'
-import PageHero from '../components/PageHero'
+import { ArrowRight, CheckCircle, ChevronRight, Phone, Mail, Clock } from 'lucide-react'
+import { services } from '../data/services'
+import { company } from '../data/company'
 import ContactForm from '../components/ContactForm'
 
-/* ── Custom Social SVGs for Card Icons ──────────────────────── */
-const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-    <circle cx="12" cy="12" r="5"/>
-    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-  </svg>
-)
-
-/* ── Service data grouped into 3 categories ─────────────────── */
-const serviceGroups = [
-  {
-    key:      'mobile',
-    emoji:    '🎬',
-    label:    'Mobile & Video Advertising',
-    desc:     'High-impact video-first ad formats delivered to audiences wherever they are.',
-    accentBg: 'rgba(28,114,220,.05)',
-    accentBorder: 'rgba(28,114,220,.12)',
-    services: [
-      {
-        icon: <MonitorPlay size={22} />, name: 'Mobile Video Streaming',
-        desc: 'Stream targeted video ads directly to mobile audiences at scale across India.',
-        color: ['#EFF6FF', 'var(--blue-600)'],
-      },
-      {
-        icon: <Video size={22} />, name: 'Video SMS',
-        desc: 'Send engaging video messages via SMS — a direct and impactful mobile channel.',
-        color: ['#F0FDF4', 'var(--accent-green)'],
-      },
-      {
-        icon: <Mail size={22} />, name: 'Video Emails',
-        desc: 'Embed rich video content inside email campaigns for superior engagement rates.',
-        color: ['#FDF4FF', 'var(--accent-magenta)'],
-      },
-      {
-        icon: <Smartphone size={22} />, name: 'Mobile Video Training',
-        desc: 'Educate and onboard your audience with mobile-optimised video training content.',
-        color: ['#FFFBEB', 'var(--accent-coral)'],
-      },
-    ],
-  },
-  {
-    key:      'location',
-    emoji:    '📡',
-    label:    'Location & Network Advertising',
-    desc:     'Reach audiences based on where they are — through WiFi, internet, Bluetooth, and proximity signals.',
-    accentBg: 'rgba(20,184,166,.05)',
-    accentBorder: 'rgba(20,184,166,.12)',
-    services: [
-      {
-        icon: <Wifi size={22} />, name: 'WiFi Advertising',
-        desc: 'Serve targeted ads to users connecting via public and private WiFi hotspots.',
-        color: ['#F0FDFA', 'var(--accent-teal)'],
-      },
-      {
-        icon: <Globe size={22} />, name: 'Internet Advertising',
-        desc: "Display and native ad placements across India's largest internet ad networks.",
-        color: ['#EFF6FF', 'var(--blue-500)'],
-      },
-      {
-        icon: <Bluetooth size={22} />, name: 'Bluetooth Advertising',
-        desc: 'Proximity marketing via Bluetooth beacons — engage customers in-store and on-site.',
-        color: ['#F0FDF4', 'var(--accent-green)'],
-      },
-      {
-        icon: <MapPin size={22} />, name: 'Location Advertising',
-        desc: 'Hyper-local geo-targeted campaigns to reach the right people in the right place.',
-        color: ['#FFF1F2', 'var(--accent-coral)'],
-      },
-      {
-        icon: <Mic size={22} />, name: 'Regional Voice SMS',
-        desc: 'Voice message broadcasts in regional languages — for broad, local audience reach.',
-        color: ['#FFF5F5', '#E53E3E'],
-      },
-    ],
-  },
-  {
-    key:      'social',
-    emoji:    '📣',
-    label:    'Social & Campaign Services',
-    desc:     'Brand-building and launch campaigns powered by social media and experiential marketing.',
-    accentBg: 'rgba(236,72,153,.05)',
-    accentBorder: 'rgba(236,72,153,.12)',
-    services: [
-      {
-        icon: <InstagramIcon />, name: 'Social Media',
-        desc: 'Comprehensive social media management and paid advertising on all major platforms.',
-        color: ['#FFF1F2', 'var(--accent-magenta)'],
-      },
-      {
-        icon: <Rocket size={22} />, name: 'Product Launches',
-        desc: 'End-to-end campaign planning and execution for impactful product launch moments.',
-        color: ['#FFFDF5', '#D97706'],
-      },
-    ],
-  },
-]
+const enquiryOptions = services.map(s => s.title).concat(['Internship', 'Courses', 'Campus Placement', 'Multiple Services', 'Not sure yet'])
 
 const enquiryFields = [
   { name: 'name',    label: 'Full Name',          placeholder: 'Your full name',    required: true,  half: true },
-  { name: 'company', label: 'Company',            placeholder: 'Your company name', required: false, half: true },
-  { name: 'email',   label: 'Email',              placeholder: 'you@email.com',     required: true,  type: 'email' },
-  { name: 'phone',   label: 'Phone Number',       placeholder: '+91 XXXXX XXXXX',   required: true,  type: 'tel' },
-  {
-    name: 'service', label: 'Service Interested In', required: false,
-    options: serviceGroups.flatMap(g => g.services.map(s => s.name)).concat(['Multiple Services']),
-  },
-  { name: 'message', label: 'Message', placeholder: 'Tell us about your requirement…', required: true, type: 'textarea' },
+  { name: 'company', label: 'Company / Brand',    placeholder: 'Company name',      required: false, half: true },
+  { name: 'email',   label: 'Email',              placeholder: 'you@email.com',     required: true,  type: 'email' as const },
+  { name: 'phone',   label: 'Phone Number',       placeholder: '+91 XXXXX XXXXX',   required: true,  type: 'tel' as const },
+  { name: 'service', label: 'Service Required',   required: false, options: enquiryOptions },
+  { name: 'message', label: 'Tell Us More',       placeholder: 'Describe your requirement…', required: true, type: 'textarea' as const },
 ]
 
 export default function Services() {
-  const subtitleNode = (
-    <span>
-      Our{' '}
-      <span style={{ color: 'var(--accent-coral)', fontWeight: 700 }}>experienced</span>
-      {' '}and{' '}
-      <span style={{ color: 'var(--accent-teal)', fontWeight: 700 }}>dedicated</span>
-      {' '}staff provide the following services with a smile.
-    </span>
-  )
+  const [active, setActive] = useState<string | null>(null)
+
+  const categories = [
+    { key: null,         label: 'All Services' },
+    { key: 'content',    label: 'Content & Media' },
+    { key: 'digital',    label: 'Digital Products' },
+  ]
+
+  const categoryMap: Record<string, string[]> = {
+    content:  ['social-media', 'ebooks-publications', 'podcasts-audio', 'email-marketing-blogs'],
+    digital:  ['websites', 'mobile-apps'],
+  }
+
+  const filtered = active
+    ? services.filter(s => categoryMap[active]?.includes(s.id))
+    : services
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .4 }}>
-      <PageHero
-        eyebrow="What We Do"
-        title="Our Services"
-        subtitle={subtitleNode}
-        breadcrumb="Services"
-      />
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
 
-      {/* ── GROUPED SERVICES ──────────────────────────────────── */}
-      <section className="section">
-        <div className="container">
+      {/* ── HERO ─────────────────────────────────────────────────── */}
+      <section style={{
+        background: 'var(--g-hero)', minHeight: '58vh', display: 'flex', alignItems: 'center',
+        paddingTop: 'var(--nav-h)', position: 'relative', overflow: 'hidden',
+      }}>
+        <div className="dot-grid-dark" />
+        <motion.div className="hero-orb hero-orb-blue"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.18, 0.28, 0.18] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '500px', height: '500px', top: '-120px', right: '-80px' }}
+        />
+        <motion.div className="hero-orb"
+          animate={{ scale: [1, 1.12, 1], opacity: [0.10, 0.18, 0.10] }}
+          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          style={{ width: '380px', height: '380px', bottom: '-80px', left: '-60px', background: 'rgba(225,48,108,0.12)' }}
+        />
 
-          {serviceGroups.map((group, gi) => (
-            <motion.div
-              key={group.key}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: .55, delay: gi * .08 }}
-              style={{ marginBottom: gi < serviceGroups.length - 1 ? '4.5rem' : 0 }}
-            >
-              {/* Group header */}
-              <div style={{
-                background: group.accentBg,
-                border: `1px solid ${group.accentBorder}`,
-                borderRadius: 'var(--radius-xl)',
-                padding: '1.5rem 2rem',
-                marginBottom: '1.75rem',
-                display: 'flex', alignItems: 'center', gap: '1.25rem',
-              }}>
-                <span style={{ fontSize: '2rem', lineHeight: 1 }}>{group.emoji}</span>
-                <div>
-                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.25rem,2.5vw,1.6rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.3rem' }}>
-                    {group.label}
-                  </h2>
-                  <p style={{ fontSize: '.9rem', color: 'var(--slate-500)', lineHeight: 1.6 }}>{group.desc}</p>
+        <div className="container" style={{ position: 'relative', zIndex: 1, padding: '6rem 1.5rem' }}>
+          <div className="breadcrumb">
+            <Link to="/">Home</Link><span>/</span><span>Services</span>
+          </div>
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65 }} style={{ maxWidth: '760px' }}>
+            <span className="eyebrow eyebrow-dark" style={{ marginBottom: '1.5rem' }}>What We Create</span>
+            <h1 style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(2.4rem,5vw,3.8rem)',
+              fontWeight: 900, color: 'white',
+              lineHeight: 1.08, letterSpacing: '-0.035em', marginBottom: '1.5rem',
+            }}>
+              Digital Media Services<br />
+              <span className="text-gradient-brand">Built for Your Brand.</span>
+            </h1>
+            <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.68)', lineHeight: 1.80, maxWidth: '580px' }}>
+              Social media, websites, ebooks, podcasts, email marketing and mobile apps — we create every format of digital media your brand needs to grow online.
+            </p>
+
+            {/* Quick stat strips */}
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginTop: '2.5rem' }}>
+              {[
+                { val: '6', label: 'Core Services' },
+                { val: 'All Formats', label: 'Digital Media' },
+                { val: 'Pan-India', label: 'Delivery' },
+              ].map(s => (
+                <div key={s.label} style={{ borderLeft: '2px solid rgba(255,255,255,0.12)', paddingLeft: '1rem' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 900, color: 'white' }}>{s.val}</div>
+                  <div style={{ fontSize: '0.77rem', color: 'rgba(255,255,255,0.48)', marginTop: '0.25rem', fontWeight: 600 }}>{s.label}</div>
                 </div>
-              </div>
-
-              {/* Services grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(group.services.length, 4)}, 1fr)`, gap: '1.15rem' }}
-                className={`svc-group-grid svc-${group.key}`}>
-                {group.services.map((s, i) => (
-                  <motion.div
-                    key={s.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-30px' }}
-                    transition={{ delay: i * .06, duration: .42 }}
-                    whileHover={{ y: -6, transition: { duration: .2 } }}
-                    style={{
-                      background: 'var(--white)',
-                      border: '1px solid var(--slate-200)',
-                      borderRadius: 'var(--radius-xl)',
-                      padding: '1.75rem 1.5rem',
-                      cursor: 'default',
-                      transition: 'box-shadow .25s, border-color .25s',
-                      position: 'relative', overflow: 'hidden',
-                    }}
-                    className="service-card-hover"
-                  >
-                    <div style={{
-                      width: '52px', height: '52px', borderRadius: '14px',
-                      background: `linear-gradient(135deg, ${s.color[0]}, ${s.color[0]}CC)`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: s.color[1],
-                      marginBottom: '1.1rem',
-                      boxShadow: `0 4px 12px ${s.color[1]}22`,
-                      transition: 'transform .2s',
-                    }}>
-                      {s.icon}
-                    </div>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '.975rem', fontWeight: 800, color: 'var(--slate-900)', lineHeight: 1.3, marginBottom: '.55rem' }}>
-                      {s.name}
-                    </h3>
-                    <p style={{ fontSize: '.845rem', color: 'var(--slate-500)', lineHeight: 1.65 }}>
-                      {s.desc}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+              ))}
+            </div>
+          </motion.div>
         </div>
+      </section>
 
+      {/* ── SERVICES GRID ────────────────────────────────────────── */}
+      <section className="section">
+        <div className="grid-mesh-overlay" />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+
+          {/* Category tabs */}
+          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', marginBottom: '3.5rem', justifyContent: 'center' }}>
+            {categories.map(cat => (
+              <button
+                key={String(cat.key)}
+                className={`filter-tab ${active === cat.key ? 'active' : ''}`}
+                onClick={() => setActive(cat.key)}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.75rem' }} className="svc-page-grid">
+            {filtered.map((service, i) => (
+              <motion.div
+                key={service.id}
+                id={service.id}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: i * 0.07, duration: 0.5 }}
+                style={{
+                  background: 'var(--white)', border: '1px solid var(--border-light)',
+                  borderRadius: '24px', padding: '2.5rem 2.25rem',
+                  transition: 'all 0.32s ease', position: 'relative', overflow: 'hidden',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-8px)'
+                  e.currentTarget.style.boxShadow = '0 32px 80px rgba(0,0,0,0.09)'
+                  e.currentTarget.style.borderColor = service.color + '25'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.borderColor = 'var(--border-light)'
+                }}
+              >
+                {/* Top gradient strip */}
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: service.gradient }} />
+
+                {/* Emoji + Number */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                  <div style={{
+                    width: '64px', height: '64px', borderRadius: '20px',
+                    background: service.colorBg,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.9rem',
+                    boxShadow: `0 4px 16px ${service.colorBg}`,
+                  }}>
+                    {service.emoji}
+                  </div>
+                  <span style={{ fontSize: '0.68rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--slate-300)', paddingTop: '0.3rem' }}>
+                    {service.number}
+                  </span>
+                </div>
+
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '0.65rem' }}>
+                  {service.title}
+                </h3>
+                <p style={{ fontSize: '0.895rem', color: 'var(--slate-500)', lineHeight: 1.72, marginBottom: '1.5rem' }}>
+                  {service.longDesc}
+                </p>
+
+                {/* Benefits */}
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <p style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--slate-400)', marginBottom: '0.65rem' }}>
+                    What's Included
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {service.benefits.map(b => (
+                      <div key={b} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.82rem', color: 'var(--slate-600)', fontWeight: 600 }}>
+                        <CheckCircle size={13} style={{ color: service.color, flexShrink: 0, marginTop: '0.15rem' }} />
+                        {b}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Deliverables */}
+                <div style={{ background: service.colorBg, borderRadius: '12px', padding: '0.85rem 1rem', marginBottom: '1.5rem' }}>
+                  <p style={{ fontSize: '0.70rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: service.color, marginBottom: '0.5rem' }}>
+                    Deliverables
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                    {service.deliverables.map(d => (
+                      <span key={d} style={{
+                        fontSize: '0.76rem', fontWeight: 700, color: service.color,
+                        background: 'rgba(255,255,255,0.7)', padding: '0.2rem 0.65rem',
+                        borderRadius: '999px',
+                      }}>
+                        {d}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <a
+                  href="#enquiry"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                    fontSize: '0.875rem', fontWeight: 700, color: service.color,
+                    borderBottom: `1.5px solid ${service.color}40`, paddingBottom: '0.1rem',
+                    transition: 'gap 0.2s, border-color 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.gap = '0.65rem'; e.currentTarget.style.borderColor = service.color }}
+                  onMouseLeave={e => { e.currentTarget.style.gap = '0.4rem'; e.currentTarget.style.borderColor = `${service.color}40` }}
+                >
+                  Get a Quote <ChevronRight size={14} />
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
         <style>{`
-          .service-card-hover:hover{ box-shadow: var(--shadow-lg); border-color: rgba(11,63,160,.18)!important; }
-          .svc-mobile  { grid-template-columns: repeat(4,1fr)!important; }
-          .svc-location{ grid-template-columns: repeat(5,1fr)!important; }
-          .svc-social  { grid-template-columns: repeat(2,1fr)!important; }
-          @media(max-width:1100px){
-            .svc-mobile  { grid-template-columns: repeat(2,1fr)!important; }
-            .svc-location{ grid-template-columns: repeat(3,1fr)!important; }
-          }
-          @media(max-width:700px){
-            .svc-mobile,.svc-location,.svc-social{ grid-template-columns: repeat(2,1fr)!important; }
-          }
-          @media(max-width:440px){
-            .svc-mobile,.svc-location,.svc-social{ grid-template-columns: 1fr!important; }
-          }
+          @media(max-width:1100px){.svc-page-grid{grid-template-columns:repeat(2,1fr)!important;}}
+          @media(max-width:640px){.svc-page-grid{grid-template-columns:1fr!important;}}
         `}</style>
       </section>
 
-      {/* ── ENQUIRY SECTION ───────────────────────────────────── */}
-      <section className="section section--alt" id="enquiry">
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'start' }} className="enquiry-grid">
+      {/* ── LEARNING CALLOUT ─────────────────────────────────────── */}
+      <section style={{ background: 'var(--dark-900)', padding: '5rem 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="dot-grid-dark" />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3rem', flexWrap: 'wrap' }}>
+            <div>
+              <span className="eyebrow eyebrow-dark" style={{ marginBottom: '1rem' }}>Also Offered</span>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.65rem,3vw,2.35rem)', fontWeight: 900, color: 'white', letterSpacing: '-0.03em', marginBottom: '0.75rem' }}>
+                Internships, Courses & Placements
+              </h2>
+              <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.60)', maxWidth: '520px', lineHeight: 1.75 }}>
+                We also offer internship programmes, digital media certification courses and campus placement drives for students and freshers across India.
+              </p>
+            </div>
+            <Link to="/learning" className="btn btn-primary btn-lg btn-arrow" style={{ flexShrink: 0 }}>
+              Explore Learning <ArrowRight size={18} className="arrow-icon" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
-            {/* Left Column */}
+      {/* ── ENQUIRY SECTION ───────────────────────────────────────── */}
+      <section className="section section--alt" id="enquiry">
+        <div className="grid-mesh-overlay" />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: '5rem', alignItems: 'start' }} className="enquiry-layout">
+
+            {/* Left info */}
             <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>Get in Touch</div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3vw,2.2rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.8rem' }}>
-                Ready to Get Started?
+              <span className="eyebrow eyebrow-blue" style={{ marginBottom: '1.25rem' }}>
+                <span className="dot-pulse" /> Get a Quote
+              </span>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem,3vw,2.4rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '0.8rem', letterSpacing: '-0.03em' }}>
+                Let's Create Something Together.
               </h2>
               <div className="divider-blue" />
-              <p style={{ fontSize: '.975rem', color: 'var(--slate-500)', lineHeight: 1.8, marginBottom: '2rem' }}>
-                Kindly fill-up the form below and we shall revert to you within 48 hours
+              <p style={{ fontSize: '0.975rem', color: 'var(--slate-500)', lineHeight: 1.80, marginBottom: '2rem' }}>
+                Tell us about your brand and what kind of digital media you need. We'll respond within 48 hours with a tailored proposal.
               </p>
+
               {[
-                { icon: <Clock size={16} />,  title: '48-Hour Response', sub: 'Guaranteed reply on all enquiries' },
-                { icon: <Phone size={16} />,  title: 'Call Us',          sub: <a href="tel:02266661314" style={{ color: 'var(--blue-600)', fontWeight: 700 }}>022-66661314</a> },
-                { icon: <Mail size={16} />,   title: 'Email Us',         sub: <a href="mailto:info@3hdmedia.com" style={{ color: 'var(--blue-600)', fontWeight: 700 }}>info@3hdmedia.com</a> },
-              ].map(item => (
-                <div key={item.title} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', marginBottom: '1.15rem' }}>
+                { icon: <Clock size={15} />,  title: 'Response Time',   sub: 'Within 48 hours' },
+                { icon: <Phone size={15} />,  title: 'Call Us',         sub: <a href={company.contact.phoneHref} style={{ color: 'var(--blue-600)', fontWeight: 700 }}>{company.contact.phone}</a> },
+                { icon: <Mail size={15} />,   title: 'Email Us',        sub: <a href={`mailto:${company.contact.email}`} style={{ color: 'var(--blue-600)', fontWeight: 700 }}>{company.contact.email}</a> },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start', marginBottom: '1rem' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--g-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0, boxShadow: 'var(--shadow-blue)' }}>
                     {item.icon}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '.9rem', color: 'var(--slate-900)' }}>{item.title}</div>
-                    <div style={{ fontSize: '.82rem', color: 'var(--slate-500)' }}>{item.sub}</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.90rem', color: 'var(--slate-900)' }}>{item.title}</div>
+                    <div style={{ fontSize: '0.83rem', color: 'var(--slate-500)' }}>{item.sub}</div>
                   </div>
                 </div>
               ))}
-
-              <div style={{ borderTop: '1px solid var(--slate-200)', paddingTop: '1.5rem', marginTop: '1.25rem' }}>
-                <p style={{ fontSize: '.78rem', fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--slate-400)', marginBottom: '.75rem' }}>Also Explore</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.6rem' }}>
-                  <Link to="/internships" className="btn btn-outline btn-sm">Internships</Link>
-                  <Link to="/courses"     className="btn btn-outline btn-sm">Courses</Link>
-                  <Link to="/placements"  className="btn btn-outline btn-sm">Placements</Link>
-                </div>
-              </div>
             </motion.div>
 
-            {/* Right Column: form */}
-            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: .1 }}>
-              <div style={{ background: 'var(--white)', border: '1px solid var(--slate-200)', borderRadius: 'var(--radius-xl)', padding: '2.25rem', boxShadow: 'var(--shadow-md)' }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '.4rem' }}>
-                  Send an Enquiry
+            {/* Right form */}
+            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+              <div style={{ background: 'var(--white)', border: '1px solid var(--border-light)', borderRadius: '24px', padding: '2.5rem', boxShadow: 'var(--shadow-md)' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '0.4rem' }}>
+                  Request a Quote
                 </h3>
-                <p style={{ fontSize: '.875rem', color: 'var(--slate-500)', marginBottom: '1.75rem' }}>
-                  Fill in your details and we'll get back to you within 48 hours.
+                <p style={{ fontSize: '0.875rem', color: 'var(--slate-500)', marginBottom: '2rem' }}>
+                  We'll come back with a tailored solution and pricing for your needs.
                 </p>
-                <ContactForm fields={enquiryFields} submitLabel="Submit Enquiry" />
+                <ContactForm fields={enquiryFields} submitLabel="Submit Request" />
               </div>
             </motion.div>
           </div>
         </div>
-        <style>{`@media(max-width:900px){.enquiry-grid{grid-template-columns:1fr!important;}}`}</style>
+        <style>{`@media(max-width:900px){.enquiry-layout{grid-template-columns:1fr!important;}}`}</style>
       </section>
+
     </motion.div>
   )
 }

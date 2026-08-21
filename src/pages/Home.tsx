@@ -1,791 +1,857 @@
-import { useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import {
-  MonitorPlay, Wifi, Globe, MapPin, Share2,
-  ArrowRight, TrendingUp, Award, Zap,
-  Briefcase, GraduationCap, BookMarked,
-  CheckCircle,
-} from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowRight, ChevronRight, CheckCircle } from 'lucide-react'
+import { services } from '../data/services'
 
-/* ── Custom Social SVGs ───────────────────────────────────────── */
-const FacebookIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-  </svg>
-)
-const InstagramIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-    <circle cx="12" cy="12" r="5"/>
-    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-  </svg>
-)
-const LinkedinIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-  </svg>
-)
-const YoutubeIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.516 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.872.507 9.388.507 9.388.507s7.517 0 9.389-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-  </svg>
-)
-const WhatsappIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.338 5.393 0 11.95 0c3.178.001 6.164 1.24 8.41 3.49a11.83 11.83 0 0 1 3.486 8.417c-.004 6.556-5.338 11.953-11.897 11.953-2.002-.001-3.967-.505-5.714-1.46L0 24zm6.337-1.658c1.68.997 3.56 1.523 5.482 1.524H11.9c5.65 0 10.25-4.606 10.252-10.264 0-2.739-1.066-5.313-3.004-7.256A10.165 10.165 0 0 0 11.9 3.47c-5.655 0-10.26 4.607-10.262 10.265-.001 1.96.512 3.878 1.488 5.56l-.328 1.2.366 1.332-1.393-.365zm11.135-7.96c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-  </svg>
-)
-
-/* ── Animated counter ────────────────────────────────────────── */
-function AnimatedNumber({ target, suffix = '' }: { target: number; suffix?: string }) {
-  const ref   = useRef(null)
-  const inView = useInView(ref, { once: true })
-  const mv    = useMotionValue(0)
-  const spring = useSpring(mv, { stiffness: 60, damping: 14 })
-  const [display, setDisplay] = useState(0)
-
-  useEffect(() => { if (inView) mv.set(target) }, [inView, target, mv])
-  useEffect(() => spring.on('change', v => setDisplay(Math.round(v))), [spring])
-
-  return <span ref={ref}>{display.toLocaleString()}{suffix}</span>
-}
-
-/* ── Service marquee ─────────────────────────────────────────── */
-const SERVICES = [
-  'Mobile Video Streaming', 'WiFi Advertising', 'Internet Advertising',
-  'Regional Voice SMS', 'Location Advertising', 'Product Launches',
-  'Video SMS', 'Mobile Video Training', 'Bluetooth Advertising',
-  'Social Media', 'Video Emails',
+/* ── Rotating headline words ───────────────────────────────────── */
+const ROTATING_WORDS = [
+  { text: 'Social Media',     color: '#E1306C' },
+  { text: 'Websites',        color: '#2563EB' },
+  { text: 'eBooks',          color: '#7C3AED' },
+  { text: 'Podcasts',        color: '#14B8A6' },
+  { text: 'Email Marketing', color: '#F97316' },
+  { text: 'Mobile Apps',     color: '#EC4899' },
 ]
 
-function Marquee() {
-  const items = [...SERVICES, ...SERVICES]
+function RotatingWord() {
+  const [idx, setIdx] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % ROTATING_WORDS.length), 2200)
+    return () => clearInterval(t)
+  }, [])
+  const w = ROTATING_WORDS[idx]
   return (
-    <div className="marquee-wrap" style={{ borderBottom: '1px solid var(--slate-200)', background: 'var(--white)' }}>
-      <div className="marquee-track" style={{ padding: '.85rem 0' }}>
-        {items.map((s, i) => (
-          <span key={i} className="marquee-item" style={{ color: 'var(--slate-400)', fontSize: '.78rem', fontWeight: 800 }}>
-            {s}
-            <span className="marquee-dot" style={{ background: 'var(--slate-300)' }} />
-          </span>
-        ))}
-      </div>
-    </div>
+    <span style={{ display: 'inline-block', position: 'relative' }}>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={idx}
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -40, opacity: 0 }}
+          transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+          style={{
+            display: 'inline-block',
+            color: w.color,
+            fontStyle: 'italic',
+          }}
+        >
+          {w.text}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   )
 }
 
-/* ── Platform Infinite Marquee Ticker ────────────────────────── */
-function PlatformMarquee() {
-  const platforms = [
-    { icon: <InstagramIcon />, name: 'Instagram', color: '#E1306C', glow: 'rgba(225,48,108,0.15)' },
-    { icon: <FacebookIcon />, name: 'Facebook', color: '#1877F2', glow: 'rgba(24,119,242,0.15)' },
-    { icon: <YoutubeIcon />, name: 'YouTube', color: '#FF0000', glow: 'rgba(255,0,0,0.15)' },
-    { icon: <WhatsappIcon />, name: 'WhatsApp', color: '#25D366', glow: 'rgba(37,211,102,0.15)' },
-    { icon: <LinkedinIcon />, name: 'LinkedIn', color: '#0077B5', glow: 'rgba(0,119,181,0.15)' },
-  ]
-  const doublePlatforms = [...platforms, ...platforms, ...platforms, ...platforms]
-  
-  return (
-    <div className="marquee-container" style={{ background: 'var(--slate-50)', borderBottom: '1px solid var(--slate-200)', padding: '1.25rem 0' }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-        <span style={{ fontSize: '.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.12em', color: 'var(--slate-400)', flexShrink: 0 }}>
-          Platforms:
-        </span>
-        <div style={{ overflow: 'hidden', width: '100%' }}>
-          <div className="marquee-scroll">
-            {doublePlatforms.map((p, i) => (
-              <div
-                key={i}
-                className="marquee-badge"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.55rem 1.25rem',
-                  background: 'white',
-                  border: '1px solid var(--slate-200)',
-                  borderRadius: '9999px',
-                  marginRight: '2rem',
-                  boxShadow: 'var(--shadow-sm)',
-                  transition: 'all 0.3s ease',
-                  cursor: 'default',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = p.color;
-                  e.currentTarget.style.color = p.color;
-                  e.currentTarget.style.boxShadow = `0 4px 12px ${p.glow}`;
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'var(--slate-200)';
-                  e.currentTarget.style.color = 'inherit';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center' }}>{p.icon}</span>
-                <span style={{ fontWeight: 700, fontSize: '.86rem' }}>{p.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/* ── High-Fidelity Phone Mockup ─────────────────────────────── */
-function PhoneMockup() {
-  return (
-    <div style={{
-      width: '290px',
-      height: '570px',
-      background: '#090F24',
-      border: '12px solid #233156',
-      borderRadius: '40px',
-      position: 'relative',
-      boxShadow: 'var(--shadow-xl), 0 0 50px rgba(42,169,242,.25)',
-      overflow: 'hidden',
-    }}>
-      {/* Notch / Speaker */}
-      <div style={{
-        position: 'absolute',
-        top: '0',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '110px',
-        height: '24px',
-        background: '#233156',
-        borderRadius: '0 0 15px 15px',
-        zIndex: 10,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <div style={{ width: '40px', height: '4px', background: '#090F24', borderRadius: '2px' }} />
-      </div>
-
-      {/* Screen Frame */}
-      <div style={{
-        padding: '36px 12px 12px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        background: '#F8FAFC',
-        color: '#0F172A',
-        fontFamily: 'var(--font-body)',
-      }}>
-        {/* Mock Social Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '10px', borderBottom: '1px solid #E2E8F0', marginBottom: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{
-              width: '28px',
-              height: '28px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0B3FA0, #2AA9F2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: '900',
-              fontSize: '9px',
-              letterSpacing: '-0.05em'
-            }}>3HD</div>
-            <div>
-              <div style={{ fontSize: '10px', fontWeight: '800', lineHeight: 1, color: '#0F172A' }}>3hdmedia</div>
-              <div style={{ fontSize: '8px', color: '#64748B', fontWeight: '600', marginTop: '1px' }}>Sponsored</div>
-            </div>
-          </div>
-          <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#64748B', cursor: 'pointer' }}>•••</div>
-        </div>
-
-        {/* Ad Mock Image/Graphic */}
-        <div style={{
-          width: '100%',
-          height: '210px',
-          background: 'linear-gradient(135deg, #0B3FA0 0%, #2AA9F2 100%)',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: 'inset 0 0 40px rgba(0,0,0,.25)',
-        }}>
-          {/* Decorative network grid overlay */}
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,.15) 1px, transparent 1px)', backgroundSize: '16px 16px', pointerEvents: 'none' }} />
-
-          {/* Campaign graphics mockup */}
-          <motion.div
-            animate={{ scale: [0.95, 1.05, 0.95] }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ color: 'white', textAlign: 'center', padding: '15px', zIndex: 1 }}
-          >
-            <div style={{ fontSize: '32px', marginBottom: '8px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>🚀</div>
-            <div style={{ fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.08em', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>3HD Media</div>
-            <div style={{ fontSize: '8px', opacity: 0.9, marginTop: '3px', fontWeight: '600', letterSpacing: '0.04em' }}>SOCIAL ADVERTISING HUB</div>
-          </motion.div>
-
-          <div style={{ position: 'absolute', bottom: '8px', right: '8px', background: 'rgba(0,0,0,.65)', color: 'white', fontSize: '8px', padding: '2px 6px', borderRadius: '4px', fontWeight: '700', backdropFilter: 'blur(2px)' }}>
-            Live Preview
-          </div>
-        </div>
-
-        {/* Mock Like / Share Action Bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 4px 6px' }}>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <span style={{ fontSize: '13px', cursor: 'pointer', transition: 'transform 0.2s' }} className="mock-feed-btn">❤️</span>
-            <span style={{ fontSize: '13px', cursor: 'pointer', transition: 'transform 0.2s' }} className="mock-feed-btn">💬</span>
-            <span style={{ fontSize: '13px', cursor: 'pointer', transition: 'transform 0.2s' }} className="mock-feed-btn">✈️</span>
-          </div>
-          <span style={{ fontSize: '13px', cursor: 'pointer' }}>🔖</span>
-        </div>
-
-        {/* High Conversion CTA Link */}
-        <Link to="/contact" style={{
-          background: 'linear-gradient(135deg, #0B3FA0, #1C72DC)',
-          color: 'white',
-          textAlign: 'center',
-          padding: '9px',
-          borderRadius: '8px',
-          fontSize: '11px',
-          fontWeight: '700',
-          marginBottom: '8px',
-          display: 'block',
-          boxShadow: '0 4px 12px rgba(11,63,160,.2)',
-          transition: 'transform 0.2s, background 0.2s',
-          textDecoration: 'none',
-        }} className="mock-cta-btn">
-          Get in Touch
-        </Link>
-
-        {/* Ad Caption text */}
-        <div style={{ fontSize: '9px', lineHeight: '1.4', padding: '0 4px', color: '#334155' }}>
-          <strong>3hdmedia</strong> Reach millions of active users in India with our mobile video streaming, WiFi network, and social media advertising services! 🚀 #socialmedia #digitalads #roi
-        </div>
-
-        {/* Mock Comments Link */}
-        <div style={{ fontSize: '8px', color: '#94A3B8', marginTop: '6px', padding: '0 4px', borderTop: '1px solid #F1F5F9', paddingTop: '6px' }}>
-          View all 48 comments
-        </div>
-      </div>
-
-      {/* Mock Home indicator bar */}
-      <div style={{
-        position: 'absolute',
-        bottom: '8px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '100px',
-        height: '4px',
-        background: '#233156',
-        borderRadius: '2px',
-      }} />
-
-      <style>{`
-        .mock-feed-btn:hover { transform: scale(1.18); }
-        .mock-cta-btn:hover { transform: translateY(-1px); background: #0B3FA0 !important; }
-      `}</style>
-    </div>
-  )
-}
-
-/* ── Flag service card (for preview section) ─────────────────── */
-interface FlagService { icon: React.ReactNode; title: string; desc: string; color: string }
-function ServicePreviewCard({ icon, title, desc, color }: FlagService) {
-  return (
-    <motion.div
-      whileHover={{ y: -6 }}
-      style={{
-        background: 'var(--white)',
-        border: '1px solid var(--slate-200)',
-        borderRadius: 'var(--radius-xl)',
-        padding: '2.25rem 2rem',
-        cursor: 'default',
-        transition: 'box-shadow .25s, border-color .25s',
-        position: 'relative', overflow: 'hidden',
-      }}
-      className="svc-card-hover"
-    >
-      <div style={{
-        width: '54px', height: '54px', borderRadius: '14px',
-        background: `${color}15`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color, marginBottom: '1.25rem',
-        boxShadow: `0 4px 12px ${color}22`,
-      }}>
-        {icon}
-      </div>
-      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '.5rem' }}>{title}</h3>
-      <p style={{ fontSize: '.875rem', color: 'var(--slate-500)', lineHeight: 1.65, marginBottom: '1.25rem' }}>{desc}</p>
-    </motion.div>
-  )
-}
-
-const flagServices: FlagService[] = [
-  { icon: <Share2 size={22} />,     title: 'Social Media',            desc: 'Targeted campaigns across Facebook, Instagram, LinkedIn & more — built to grow your brand and drive engagement.', color: 'var(--accent-magenta)' },
-  { icon: <MonitorPlay size={22} />, title: 'Mobile Video Streaming', desc: 'High-impact video ads delivered directly to mobile audiences at scale across India.', color: 'var(--blue-500)' },
-  { icon: <Wifi size={22} />,        title: 'WiFi & Internet Advertising', desc: 'Reach audiences through WiFi hotspot and internet-based ad networks for location-aware campaigns.', color: 'var(--accent-teal)' },
-  { icon: <MapPin size={22} />,      title: 'Location Advertising',   desc: 'Hyper-local geo-targeted advertising — reach the right people in the right place at the right time.', color: 'var(--accent-coral)' },
+/* ── Platform badge ticker ─────────────────────────────────────── */
+const platforms = [
+  { name: 'Instagram', icon: '📸', color: '#E1306C' },
+  { name: 'Facebook',  icon: '👤', color: '#1877F2' },
+  { name: 'YouTube',   icon: '▶️', color: '#FF0000' },
+  { name: 'LinkedIn',  icon: '💼', color: '#0077B5' },
+  { name: 'WhatsApp',  icon: '💬', color: '#25D366' },
+  { name: 'Spotify',   icon: '🎵', color: '#1DB954' },
+  { name: 'Apple',     icon: '🎙️', color: '#000000' },
+  { name: 'WordPress', icon: '📝', color: '#21759B' },
+  { name: 'Shopify',   icon: '🛒', color: '#96BF48' },
+  { name: 'iOS',       icon: '📱', color: '#007AFF' },
+  { name: 'Android',   icon: '🤖', color: '#3DDC84' },
+  { name: 'Mailchimp', icon: '✉️', color: '#FFE01B' },
 ]
 
-/* ── Talent Program Teaser List ──────────────────────────────── */
-const talentCards = [
+/* ── Process steps ─────────────────────────────────────────────── */
+const processSteps = [
   {
-    icon: <Briefcase size={20} />,
-    title: 'Careers at 3HD Media',
-    desc: 'Join the pioneers in digital media. We have various openings across Sales, Marketing, IT, Servicing, and Journalism. Freshers welcome!',
-    to: '/career',
-    ctaText: 'View Openings',
+    num: '01', emoji: '🔍', title: 'Discover',
+    desc: 'We learn about your brand, audience, goals and the digital landscape you operate in.',
   },
   {
-    icon: <GraduationCap size={20} />,
-    title: 'Internships & Live Projects',
-    desc: 'Gain real-world industry experience. Live projects all over India for undergraduates, graduates, and post-graduates in multiple domains.',
-    to: '/internships',
-    ctaText: 'Apply for Internship',
+    num: '02', emoji: '📐', title: 'Strategize',
+    desc: 'We build a content and media strategy aligned with your objectives and chosen platforms.',
   },
   {
-    icon: <BookMarked size={20} />,
-    title: 'Courses & Campus Placements',
-    desc: 'Get certified with our Social Media programmes. We also provide final campus placement assistance for MBA students.',
-    links: [
-      { to: '/courses', label: 'Our Courses' },
-      { to: '/placements', label: 'Campus Placements' }
-    ]
-  }
+    num: '03', emoji: '🎨', title: 'Create',
+    desc: 'Our team produces the content, design and digital assets — built for your audience.',
+  },
+  {
+    num: '04', emoji: '🚀', title: 'Publish',
+    desc: 'We launch and distribute across all relevant platforms, on schedule and on brand.',
+  },
+  {
+    num: '05', emoji: '📊', title: 'Grow',
+    desc: 'We track, optimise and improve — growing your digital presence continuously.',
+  },
 ]
 
-/* ── Main export ─────────────────────────────────────────────── */
+/* ── Why 3HD pillars ───────────────────────────────────────────── */
+const pillars = [
+  { emoji: '🎯', title: 'Full-Service Studio',   desc: 'Social media, websites, apps, podcasts, ebooks, email — everything you need in one place.' },
+  { emoji: '✨', title: 'Content That Works',     desc: 'We create digital media that captures attention, communicates clearly and drives real results.' },
+  { emoji: '⚡', title: 'Fast Turnaround',        desc: 'Efficient workflows and dedicated teams mean your projects get done without unnecessary delays.' },
+  { emoji: '📈', title: 'Growth Focused',         desc: 'Everything we create is built with one purpose — growing your digital audience and impact.' },
+  { emoji: '🤝', title: 'Freshers Welcome',       desc: 'We actively train the next generation through internships, courses and campus placements.' },
+]
+
+/* ── Floating media format cards (hero visual) ─────────────────── */
+const floatingCards = [
+  { emoji: '📱', label: 'Social Post',   top: '8%',  left: '0%',   delay: 0,   color: '#E1306C' },
+  { emoji: '🌐', label: 'Website',       top: '28%', right: '0%',  delay: 0.6, color: '#2563EB' },
+  { emoji: '🎙️', label: 'Podcast',       top: '55%', left: '2%',   delay: 1.0, color: '#14B8A6' },
+  { emoji: '📖', label: 'eBook',         top: '72%', right: '2%',  delay: 0.3, color: '#7C3AED' },
+  { emoji: '✉️', label: 'Email',         top: '42%', left: '-4%',  delay: 1.4, color: '#F97316' },
+  { emoji: '📲', label: 'Mobile App',    top: '15%', right: '-2%', delay: 0.8, color: '#EC4899' },
+]
+
+/* ── Stats ─────────────────────────────────────────────────────── */
+const stats = [
+  { val: '6+',       label: 'Digital Media Services' },
+  { val: 'Pan-India', label: 'Client Reach' },
+  { val: '48hr',     label: 'Response Time' },
+  { val: '100%',     label: 'Digital-First Approach' },
+]
+
+/* ── Sample work items ─────────────────────────────────────────── */
+const sampleWork = [
+  {
+    emoji: '📱', title: 'Social Media Campaign',
+    tag: 'Social Media', gradient: 'linear-gradient(135deg, #833AB4 0%, #E1306C 100%)',
+    desc: 'Monthly social media management with original content, reels, stories and paid promotion.',
+  },
+  {
+    emoji: '🌐', title: 'Business Website',
+    tag: 'Web Design', gradient: 'linear-gradient(135deg, #1D4ED8 0%, #3B82F6 100%)',
+    desc: 'Custom website design and development — responsive, fast and SEO-optimised.',
+  },
+  {
+    emoji: '🎙️', title: 'Brand Podcast Series',
+    tag: 'Podcast', gradient: 'linear-gradient(135deg, #0D9488 0%, #2DD4BF 100%)',
+    desc: 'End-to-end podcast production: recording, editing, artwork and multi-platform distribution.',
+  },
+  {
+    emoji: '📲', title: 'Mobile Application',
+    tag: 'Mobile App', gradient: 'linear-gradient(135deg, #DB2777 0%, #F472B6 100%)',
+    desc: 'iOS and Android app designed for a seamless, intuitive user experience.',
+  },
+]
+
+/* ══════════════════════════════════════════════════════════════════
+   MAIN HOME PAGE
+   ══════════════════════════════════════════════════════════════════ */
 export default function Home() {
-  const mgmtRef    = useRef(null)
-  const statsRef   = useRef(null)
-  const mgmtInView = useInView(mgmtRef, { once: true, margin: '-80px' })
-  useInView(statsRef, { once: true, margin: '-80px' })
-
-  const floatingIcons = [
-    { icon: <InstagramIcon />, color: '#E1306C', size: 48, top: '10%', left: '-50px', delay: 0 },
-    { icon: <FacebookIcon />, color: '#1877F2', size: 42, top: '40%', right: '-45px', delay: 1 },
-    { icon: <YoutubeIcon />, color: '#FF0000', size: 46, bottom: '15%', left: '-40px', delay: 0.5 },
-    { icon: <WhatsappIcon />, color: '#25D366', size: 40, top: '70%', right: '-65px', delay: 1.5 },
-    { icon: <LinkedinIcon />, color: '#0077B5', size: 44, top: '15%', right: '-80px', delay: 0.8 },
-  ]
+  const doublePlatforms = [...platforms, ...platforms, ...platforms]
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
 
-      {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section style={{
-        minHeight: '100vh',
-        background: 'var(--g-hero)',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        paddingTop: 'var(--nav-h)',
-        overflow: 'hidden',
-      }}>
-        {/* Dot grid */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(rgba(255,255,255,.055) 1px, transparent 1px)',
-          backgroundSize: '30px 30px', pointerEvents: 'none',
-        }} />
-
-        {/* Background gradient blur orbs */}
-        <motion.div className="hero-orb" animate={{ scale: [1, 1.12, 1], opacity: [.18, .26, .18] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          style={{ width: '500px', height: '500px', top: '-100px', right: '-80px', background: 'rgba(42,169,242,.22)' }} />
-        <motion.div className="hero-orb" animate={{ scale: [1, 1.15, 1], opacity: [.08, .14, .08] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          style={{ width: '360px', height: '360px', bottom: '-60px', left: '-60px', background: 'rgba(232,115,95,.15)' }} />
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 01 — HERO
+          ═══════════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          minHeight: '100vh',
+          background: 'var(--g-hero)',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          paddingTop: 'var(--nav-h)',
+          overflow: 'hidden',
+        }}
+        aria-label="Hero"
+      >
+        <div className="dot-grid-dark" />
+        <motion.div className="hero-orb hero-orb-blue"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.20, 0.30, 0.20] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '600px', height: '600px', top: '-160px', right: '-120px' }}
+        />
+        <motion.div className="hero-orb hero-orb-purple"
+          animate={{ scale: [1, 1.12, 1], opacity: [0.12, 0.20, 0.12] }}
+          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          style={{ width: '400px', height: '400px', bottom: '-100px', left: '-80px' }}
+        />
+        <motion.div className="hero-orb"
+          animate={{ scale: [1, 1.10, 1], opacity: [0.08, 0.14, 0.08] }}
+          transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+          style={{ width: '300px', height: '300px', bottom: '15%', right: '15%', background: 'rgba(225,48,108,0.12)' }}
+        />
 
         <div className="container" style={{ position: 'relative', zIndex: 1, padding: '5rem 1.5rem 4rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '5rem', alignItems: 'center' }}
-            className="hero-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '4rem', alignItems: 'center' }} className="hero-grid">
 
-            {/* Left Column */}
+            {/* Left: Copy */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -32 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 0.75, ease: [0.4, 0, 0.2, 1] }}
             >
-              {/* Badge chip */}
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: '.5rem',
-                background: 'rgba(255,255,255,.06)',
-                border: '1px solid rgba(255,255,255,.12)',
-                borderRadius: '999px',
-                padding: '.4rem 1.15rem',
-                fontSize: '.72rem', fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,.85)',
-                marginBottom: '1.75rem',
-              }}>
-                <motion.span
-                  animate={{ scale: [1, 1.4, 1], opacity: [1, .5, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--accent-teal)', display: 'block' }}
-                />
-                Mumbai's Digital Advertising Pioneers
-              </div>
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} style={{ marginBottom: '1.75rem' }}>
+                <span className="eyebrow eyebrow-dark">
+                  <span className="dot-pulse" />
+                  Full-Service Digital Media Studio · Mumbai
+                </span>
+              </motion.div>
 
-              {/* Headline */}
               <h1 style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.4rem, 5vw, 4rem)',
-                fontWeight: 900, color: 'white',
-                lineHeight: 1.1, letterSpacing: '-.03em',
-                marginBottom: '1.5rem',
+                fontSize: 'clamp(2.8rem, 5.5vw, 4.6rem)',
+                fontWeight: 900,
+                color: 'white',
+                lineHeight: 1.05,
+                letterSpacing: '-0.035em',
+                marginBottom: '0.6rem',
               }}>
-                Social Media &{' '}
-                <span className="text-gradient-blue" style={{ display: 'inline-block' }}>
-                  Digital Advertising
-                </span>{' '}
-                That Gets You Noticed
+                We Create
+              </h1>
+              <h1 style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.8rem, 5.5vw, 4.6rem)',
+                fontWeight: 900,
+                lineHeight: 1.05,
+                letterSpacing: '-0.035em',
+                marginBottom: '0.6rem',
+                color: 'white',
+              }}>
+                <RotatingWord />
+              </h1>
+              <h1 style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.8rem, 5.5vw, 4.6rem)',
+                fontWeight: 900,
+                color: 'white',
+                lineHeight: 1.05,
+                letterSpacing: '-0.035em',
+                marginBottom: '1.75rem',
+              }}>
+                For Your Brand.
               </h1>
 
-              <p style={{ fontSize: '1.08rem', color: 'rgba(255,255,255,.72)', lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: '540px' }}>
-                From mobile video streaming to WiFi, location, and social media advertising — 3HD Media powers brands across every digital touchpoint.
+              <p style={{
+                fontSize: '1.1rem',
+                color: 'rgba(255,255,255,0.68)',
+                lineHeight: 1.80,
+                marginBottom: '2.75rem',
+                maxWidth: '530px',
+              }}>
+                3HD Media is a full-service digital media studio — we create social media content, websites, apps, podcasts, ebooks, email marketing and more. Your complete digital partner, all under one roof.
               </p>
 
-              {/* CTA buttons */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.85rem', marginBottom: '3rem' }}>
-                <Link to="/services" className="btn btn-white btn-lg">Explore Our Services</Link>
-                <Link to="/contact"  className="btn btn-ghost-light btn-lg">Get in Touch</Link>
+              {/* Service quick pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2.5rem' }}>
+                {services.map(s => (
+                  <span
+                    key={s.id}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                      padding: '0.4rem 0.95rem', borderRadius: '999px',
+                      fontSize: '0.79rem', fontWeight: 700,
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      color: 'rgba(255,255,255,0.80)',
+                      backdropFilter: 'blur(8px)',
+                    }}
+                  >
+                    {s.emoji} {s.title}
+                  </span>
+                ))}
               </div>
 
-              {/* Trust badges */}
-              <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                {[
-                  { icon: <TrendingUp size={16} />, label: '₹5,000 Cr+ India Digital Spend' },
-                  { icon: <Globe size={16} />,      label: '11 Core Media Services' },
-                  { icon: <Award size={16} />,      label: 'Pan-India Delivery' },
-                ].map(s => (
-                  <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-                    <div style={{
-                      width: '30px', height: '30px', borderRadius: '8px',
-                      background: 'rgba(255,255,255,.07)',
-                      border: '1px solid rgba(255,255,255,.12)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: 'var(--blue-300)', flexShrink: 0,
-                    }}>
-                      {s.icon}
-                    </div>
-                    <span style={{ fontSize: '.82rem', fontWeight: 600, color: 'rgba(255,255,255,.65)' }}>{s.label}</span>
+              {/* CTAs */}
+              <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
+                <Link to="/services" className="btn btn-primary btn-lg btn-arrow">
+                  Explore Services <ArrowRight size={18} className="arrow-icon" />
+                </Link>
+                <Link to="/contact" className="btn btn-outline-white btn-lg">
+                  Get a Quote
+                </Link>
+              </div>
+
+              {/* Stats */}
+              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                {stats.map(s => (
+                  <div key={s.label} style={{ borderLeft: '2px solid rgba(255,255,255,0.12)', paddingLeft: '1rem' }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 900, color: 'white', lineHeight: 1 }}>{s.val}</div>
+                    <div style={{ fontSize: '0.77rem', color: 'rgba(255,255,255,0.48)', marginTop: '0.3rem', fontWeight: 600 }}>{s.label}</div>
                   </div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Right Column – CSS Phone Mockup & Floating Social Icons */}
+            {/* Right: Floating cards visual */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
-              style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}
+              transition={{ duration: 0.85, delay: 0.2 }}
+              style={{ position: 'relative', height: '540px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              className="hero-visual"
             >
-              {/* Floating Social Icons */}
-              {floatingIcons.map((fi, i) => (
+              {/* Central hub */}
+              <motion.div
+                animate={{ scale: [1, 1.04, 1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{
+                  width: '160px', height: '160px', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, rgba(37,99,235,0.25) 0%, rgba(124,58,237,0.25) 100%)',
+                  border: '1.5px solid rgba(255,255,255,0.12)',
+                  backdropFilter: 'blur(16px)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 0 60px rgba(37,99,235,0.25), 0 0 120px rgba(124,58,237,0.12)',
+                  zIndex: 2,
+                }}
+              >
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 900, color: 'white', letterSpacing: '-0.04em' }}>3HD</div>
+                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.10em', textTransform: 'uppercase', marginTop: '0.25rem' }}>MEDIA</div>
+              </motion.div>
+
+              {/* Floating service cards */}
+              {floatingCards.map((card, i) => (
                 <motion.div
                   key={i}
-                  animate={{
-                    y: [0, -12, 12, 0],
-                    x: [0, 10, -10, 0],
-                  }}
-                  transition={{
-                    duration: 5.5,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: fi.delay,
-                  }}
+                  animate={{ y: [0, -14, 10, 0], x: [0, 6, -6, 0] }}
+                  transition={{ duration: 6 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: card.delay }}
                   style={{
                     position: 'absolute',
-                    top: fi.top,
-                    left: fi.left,
-                    right: fi.right,
-                    width: `${fi.size}px`,
-                    height: `${fi.size}px`,
-                    borderRadius: '50%',
-                    background: 'white',
-                    boxShadow: '0 8px 24px rgba(0,0,0,.15), 0 0 1px rgba(0,0,0,.08)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: fi.color,
-                    zIndex: 3,
+                    top: card.top,
+                    left: card.left as string | undefined,
+                    right: card.right as string | undefined,
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.14)',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '16px',
+                    padding: '0.85rem 1.15rem',
+                    display: 'flex', alignItems: 'center', gap: '0.6rem',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.24)',
                     cursor: 'default',
+                    zIndex: 3,
+                    minWidth: '130px',
                   }}
-                  whileHover={{ scale: 1.15, zIndex: 10 }}
+                  whileHover={{ scale: 1.06 }}
                 >
-                  {fi.icon}
+                  <div style={{
+                    width: '36px', height: '36px', borderRadius: '10px',
+                    background: `${card.color}22`,
+                    border: `1px solid ${card.color}44`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.1rem', flexShrink: 0,
+                  }}>
+                    {card.emoji}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'white', lineHeight: 1 }}>{card.label}</div>
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.45)', marginTop: '0.2rem', fontWeight: 600 }}>3HD Media</div>
+                  </div>
                 </motion.div>
               ))}
 
-              {/* Central Phone Mockup */}
-              <PhoneMockup />
+              {/* Connecting lines SVG */}
+              <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1, opacity: 0.15 }} xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50%" cy="50%" r="140" fill="none" stroke="white" strokeWidth="1" strokeDasharray="6 8" />
+                <circle cx="50%" cy="50%" r="220" fill="none" stroke="white" strokeWidth="0.75" strokeDasharray="4 10" />
+              </svg>
             </motion.div>
 
           </div>
         </div>
-
-        <style>{`
-          @media(max-width:900px){
-            .hero-grid{ grid-template-columns:1fr!important; text-align:center; gap: 3rem !important; }
-            .hero-grid>div:last-child{ transform: scale(0.9) !important; margin-top: 1.5rem; }
-          }
-        `}</style>
       </section>
 
-      {/* ── PLATFORMS STRIP (INFINITE SCROLLING MARQUEE) ─────────── */}
-      <PlatformMarquee />
+      {/* ═══════════════════════════════════════════════════════════
+          PLATFORM TICKER
+          ═══════════════════════════════════════════════════════════ */}
+      <div style={{ background: 'var(--white)', borderBottom: '1px solid var(--slate-100)', padding: '1.1rem 0', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', gap: '1.5rem', animation: 'scroll-left 24s linear infinite', width: 'max-content' }}>
+          {doublePlatforms.map((p, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: '0.5rem',
+              padding: '0.5rem 1.2rem', borderRadius: '999px',
+              background: 'var(--slate-50)', border: '1px solid var(--slate-200)',
+              fontSize: '0.82rem', fontWeight: 700, color: 'var(--slate-600)',
+              whiteSpace: 'nowrap', flexShrink: 0,
+            }}>
+              <span style={{ fontSize: '0.95rem' }}>{p.icon}</span>
+              {p.name}
+            </div>
+          ))}
+        </div>
+        <style>{`@keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-33.33%)}}`}</style>
+      </div>
 
-      {/* ── SERVICE MARQUEE ──────────────────────────────────────── */}
-      <Marquee />
-
-      {/* ── SERVICES PREVIEW ─────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 02 — WHAT WE DO (Services)
+          ═══════════════════════════════════════════════════════════ */}
       <section className="section">
         <div className="grid-mesh-overlay" />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <div className="label-chip label-chip-blue" style={{ marginBottom: '.9rem' }}>
-              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'currentColor', opacity: .6 }} />
-              Our Core Services
-            </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem,3.5vw,2.5rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.85rem' }}>
-              Advertising Solutions That Drive Real Results
-            </h2>
-            <p style={{ fontSize: '1.05rem', color: 'var(--slate-500)', maxWidth: '600px', margin: '0 auto', lineHeight: 1.75 }}>
-              Our <strong style={{ color: 'var(--accent-coral)' }}>experienced</strong> and <strong style={{ color: 'var(--accent-teal)' }}>dedicated</strong> staff deliver digital media solutions designed to maximise your brand's reach and ROI.
-            </p>
+
+          <div className="section-heading">
+            <span className="eyebrow eyebrow-blue" style={{ marginBottom: '1rem' }}>
+              <span className="dot-pulse" /> What We Do
+            </span>
+            <h2>Everything Your Brand Needs,<br />In Digital Media.</h2>
+            <p>We are a full-service digital media studio — creating every kind of digital content, from social media posts to mobile apps. One studio. Infinite possibilities.</p>
           </div>
 
-          <div className="grid-4" style={{ marginBottom: '2.5rem' }}>
-            {flagServices.map((s, i) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }} className="services-grid">
+            {services.map((service, i) => (
               <motion.div
-                key={s.title}
-                initial={{ opacity: 0, y: 24 }}
+                key={service.id}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ delay: i * .08, duration: .5 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: i * 0.09, duration: 0.5 }}
+                style={{
+                  background: 'var(--white)', border: '1px solid var(--border-light)',
+                  borderRadius: '24px', padding: '2.25rem 2rem',
+                  transition: 'all 0.32s ease', cursor: 'default', position: 'relative', overflow: 'hidden',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-7px)'
+                  e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.05)'
+                  e.currentTarget.style.borderColor = service.color + '30'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.borderColor = 'var(--border-light)'
+                }}
               >
-                <ServicePreviewCard {...s} />
+                {/* Top gradient strip */}
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+                  background: service.gradient, opacity: 0.7,
+                }} />
+
+                {/* Icon */}
+                <div style={{
+                  width: '60px', height: '60px', borderRadius: '18px',
+                  background: service.colorBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: '1.35rem', fontSize: '1.75rem',
+                  boxShadow: `0 4px 16px ${service.colorBg}`,
+                }}>
+                  {service.emoji}
+                </div>
+
+                {/* Number */}
+                <div style={{ fontSize: '0.68rem', fontWeight: 800, letterSpacing: '0.12em', color: 'var(--slate-300)', marginBottom: '0.55rem', textTransform: 'uppercase' }}>
+                  {service.number}
+                </div>
+
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '0.65rem' }}>
+                  {service.title}
+                </h3>
+                <p style={{ fontSize: '0.875rem', color: 'var(--slate-500)', lineHeight: 1.70, marginBottom: '1.5rem' }}>
+                  {service.shortDesc}
+                </p>
+
+                {/* Deliverables */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1.5rem' }}>
+                  {service.deliverables.map(d => (
+                    <div key={d} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.79rem', color: 'var(--slate-500)', fontWeight: 600 }}>
+                      <CheckCircle size={12} style={{ color: service.color, flexShrink: 0 }} />
+                      {d}
+                    </div>
+                  ))}
+                </div>
+
+                <Link to="/services" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                  fontSize: '0.84rem', fontWeight: 700, color: service.color,
+                  transition: 'gap 0.2s',
+                }}
+                  onMouseEnter={e => e.currentTarget.style.gap = '0.6rem'}
+                  onMouseLeave={e => e.currentTarget.style.gap = '0.35rem'}
+                >
+                  Learn more <ChevronRight size={14} />
+                </Link>
               </motion.div>
             ))}
           </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <Link to="/services" className="btn btn-primary btn-lg" style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem' }}>
-              Explore Our Services <ArrowRight size={18} />
+          <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            <Link to="/services" className="btn btn-primary btn-lg btn-arrow">
+              View All Services <ArrowRight size={18} className="arrow-icon" />
             </Link>
           </div>
         </div>
-        <style>{`
-          .svc-card-hover:hover{ box-shadow: var(--shadow-lg); border-color: rgba(11,63,160,.15)!important; }
-        `}</style>
+        <style>{`@media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr)!important;}}@media(max-width:640px){.services-grid{grid-template-columns:1fr!important;}}`}</style>
       </section>
 
-      {/* ── MANAGEMENT TEAM ──────────────────────────────────────── */}
-      <section className="section section--alt" ref={mgmtRef}>
-        <div className="grid-mesh-overlay" />
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 03 — PROCESS (dark)
+          ═══════════════════════════════════════════════════════════ */}
+      <section style={{ background: 'var(--dark-900)', padding: '7rem 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="dot-grid-dark" />
+        <motion.div className="hero-orb hero-orb-blue"
+          animate={{ scale: [1, 1.2, 1], opacity: [0.10, 0.18, 0.10] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '500px', height: '500px', top: '-100px', right: '-80px' }}
+        />
+        <motion.div className="hero-orb hero-orb-purple"
+          animate={{ scale: [1, 1.14, 1], opacity: [0.08, 0.15, 0.08] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+          style={{ width: '400px', height: '400px', bottom: '-100px', left: '-80px' }}
+        />
+
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'center' }} className="mgmt-grid">
-
-            {/* Left Column */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={mgmtInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: .65 }}
-            >
-              <div className="label-chip label-chip-blue" style={{ marginBottom: '1rem' }}>
-                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'currentColor', opacity: .6 }} />
-                Leadership
-              </div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem,3.5vw,2.6rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.9rem' }}>
-                Management Team
-              </h2>
-              <div className="divider-blue" />
-              <p style={{ fontSize: '1.05rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '1.5rem' }}>
-                Since the world is changing faster than we can imagine, the CLO (Chief Learning Officer) post has recently been created so that the CLO could impart knowledge to the Management Team whenever required.
-              </p>
-              <p style={{ fontSize: '1rem', color: 'var(--slate-600)', lineHeight: 1.85, marginBottom: '2.5rem' }}>
-                Our leadership brings deep expertise in digital media, advertising technology, and professional education — guiding 3HD Media as one of India's foremost digital advertising and media companies.
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.75rem' }}>
-                <Link to="/services" className="btn btn-primary">Our Services</Link>
-                <Link to="/contact"  className="btn btn-outline">Get in Touch</Link>
-              </div>
-            </motion.div>
-
-            {/* Right Column – feature cards */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={mgmtInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: .65, delay: .12 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '.9rem' }}
-            >
-              {[
-                { icon: <CheckCircle size={18} />, title: 'Expert Leadership Team',         sub: 'Specialists in digital media & ad-tech' },
-                { icon: <TrendingUp size={18} />,  title: 'Data-Driven Ad Strategies',      sub: 'Performance-focused advertising campaigns' },
-                { icon: <Zap size={18} />,         title: 'Continuous Innovation',           sub: 'CLO-led knowledge transfer & upskilling' },
-                { icon: <Globe size={18} />,        title: 'Pan-India Network',               sub: 'Mumbai HQ, serving all of India' },
-              ].map((f, i) => (
-                <motion.div
-                  key={f.title}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={mgmtInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: .2 + i * .08 }}
-                  whileHover={{ x: 4 }}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '1rem',
-                    padding: '1.1rem 1.35rem',
-                    background: 'var(--white)',
-                    border: '1px solid var(--slate-200)',
-                    borderRadius: 'var(--radius-lg)',
-                    cursor: 'default',
-                    transition: 'box-shadow .25s, border-color .25s',
-                  }}
-                >
-                  <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: 'var(--g-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0, boxShadow: 'var(--shadow-blue)' }}>
-                    {f.icon}
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 700, color: 'var(--slate-900)', fontSize: '.975rem' }}>{f.title}</div>
-                    <div style={{ fontSize: '.82rem', color: 'var(--slate-500)', marginTop: '.1rem' }}>{f.sub}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+          <div className="section-heading section-heading--dark" style={{ marginBottom: '4.5rem' }}>
+            <span className="eyebrow eyebrow-dark" style={{ marginBottom: '1rem' }}>How We Work</span>
+            <h2 style={{ color: 'white' }}>From Brief to Live.<br />Here's How We Do It.</h2>
+            <p>Our simple five-step process takes your digital media from strategy to results — efficiently and professionally.</p>
           </div>
-        </div>
-        <style>{`@media(max-width:900px){.mgmt-grid{grid-template-columns:1fr!important;}}`}</style>
-      </section>
 
-      {/* ── STATS DARK BAND ──────────────────────────────────────── */}
-      <section style={{ background: 'var(--g-hero)', padding: '4.5rem 0', position: 'relative', overflow: 'hidden' }} ref={statsRef}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }} />
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'rgba(255,255,255,.08)', borderRadius: 'var(--radius-xl)', overflow: 'hidden' }}
-            className="stats-grid">
-            {[
-              { num: 5000, suffix: ' Cr+', label: 'India Digital Media Spend (₹)',  icon: <TrendingUp size={20} /> },
-              { num: 11,   suffix: '+',    label: 'Core Digital Services',           icon: <MonitorPlay size={20} /> },
-              { num: 7,    suffix: '',     label: 'Career Domains',                  icon: <Briefcase size={20} /> },
-              { num: 9,    suffix: '+',    label: 'Internship Disciplines',          icon: <GraduationCap size={20} /> },
-            ].map(s => (
-              <div key={s.label} style={{ background: 'rgba(255,255,255,.04)', padding: '2.5rem 1.5rem', textAlign: 'center' }}>
-                <div style={{ color: 'var(--blue-300)', marginBottom: '.75rem', display: 'flex', justifyContent: 'center' }}>{s.icon}</div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, lineHeight: 1, marginBottom: '.4rem', background: 'var(--g-blue-text)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                  <AnimatedNumber target={s.num} suffix={s.suffix} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }} className="process-grid">
+            {processSteps.map((step, i) => (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: i * 0.10, duration: 0.5 }}
+                style={{
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+                  borderRadius: '20px', padding: '2rem 1.5rem', textAlign: 'center',
+                  transition: 'background 0.3s, transform 0.3s',
+                  position: 'relative',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'translateY(-5px)' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                {/* Number badge */}
+                <div style={{
+                  position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)',
+                  width: '28px', height: '28px', borderRadius: '50%',
+                  background: 'var(--g-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '0.72rem', fontWeight: 900, color: 'white', fontFamily: 'var(--font-display)',
+                  boxShadow: 'var(--shadow-blue)',
+                }}>
+                  {i + 1}
                 </div>
-                <div style={{ fontSize: '.82rem', color: 'rgba(255,255,255,.5)', lineHeight: 1.4 }}>{s.label}</div>
-              </div>
+
+                <div style={{ fontSize: '2.2rem', marginBottom: '1rem', marginTop: '0.5rem' }}>{step.emoji}</div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.05rem', fontWeight: 800, color: 'white', marginBottom: '0.6rem' }}>
+                  {step.title}
+                </h3>
+                <p style={{ fontSize: '0.845rem', color: 'rgba(255,255,255,0.52)', lineHeight: 1.65 }}>
+                  {step.desc}
+                </p>
+              </motion.div>
             ))}
           </div>
         </div>
-        <style>{`@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)!important;}}`}</style>
+        <style>{`@media(max-width:900px){.process-grid{grid-template-columns:repeat(2,1fr)!important;}}@media(max-width:540px){.process-grid{grid-template-columns:1fr!important;}}`}</style>
       </section>
 
-      {/* ── TALENT & CAMPUS PROGRAMS (3-card layout) ──────────────── */}
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 04 — WHY 3HD
+          ═══════════════════════════════════════════════════════════ */}
       <section className="section section--alt">
         <div className="grid-mesh-overlay" />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <div className="label-chip label-chip-blue" style={{ marginBottom: '.85rem' }}>
-              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'currentColor', opacity: .6 }} />
-              Talent & Campus Programs
-            </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem,3vw,2.1rem)', fontWeight: 900, color: 'var(--slate-900)', marginBottom: '.7rem' }}>
-              Supporting the Next Generation of Digital Professionals
-            </h2>
-            <p style={{ fontSize: '.975rem', color: 'var(--slate-500)', maxWidth: '540px', margin: '0 auto', lineHeight: 1.75 }}>
-              Beyond our advertising services, 3HD Media runs internships, professional courses, and campus placement programmes to develop India's digital talent.
-            </p>
+          <div className="section-heading" style={{ marginBottom: '3.5rem' }}>
+            <span className="eyebrow eyebrow-purple" style={{ marginBottom: '1rem' }}>Why 3HD Media</span>
+            <h2>Why Brands Choose Us.</h2>
           </div>
 
-          <div className="grid-3" style={{ maxWidth: '1080px', margin: '0 auto' }}>
-            {talentCards.map((t, i) => (
+          <div className="grid-5">
+            {pillars.map((p, i) => (
               <motion.div
-                key={t.title}
-                initial={{ opacity: 0, y: 16 }}
+                key={p.title}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: i * .07 }}
-                style={{ height: '100%' }}
+                transition={{ delay: i * 0.08 }}
+                style={{
+                  background: 'var(--white)', border: '1px solid var(--border-light)',
+                  borderRadius: '20px', padding: '2rem 1.5rem', textAlign: 'center',
+                  transition: 'all 0.28s ease', cursor: 'default',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; e.currentTarget.style.borderColor = 'rgba(37,99,235,0.16)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border-light)' }}
               >
-                <div
-                  style={{
-                    background: 'var(--white)',
-                    border: '1px solid var(--slate-200)',
-                    borderRadius: 'var(--radius-xl)',
-                    padding: '2.25rem 2rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: '100%',
-                    boxShadow: 'var(--shadow-sm)',
-                    transition: 'transform .25s, box-shadow .25s, border-color .25s',
-                  }}
-                  className="talent-card-hover"
-                >
-                  <div style={{
-                    width: '46px', height: '46px', borderRadius: '12px',
-                    background: 'linear-gradient(135deg, rgba(11,63,160,.06), rgba(42,169,242,.12))',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: 'var(--blue-600)', marginBottom: '1.25rem', flexShrink: 0
-                  }}>
-                    {t.icon}
-                  </div>
-                  <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.1rem', color: 'var(--slate-900)', marginBottom: '.65rem' }}>
-                    {t.title}
-                  </h3>
-                  <p style={{ fontSize: '.875rem', color: 'var(--slate-500)', lineHeight: 1.65, marginBottom: '1.75rem', flex: 1 }}>
-                    {t.desc}
-                  </p>
+                <div style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>{p.emoji}</div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '0.6rem' }}>
+                  {p.title}
+                </h3>
+                <p style={{ fontSize: '0.845rem', color: 'var(--slate-500)', lineHeight: 1.65 }}>
+                  {p.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                  {t.to ? (
-                    <Link to={t.to} className="btn btn-outline btn-sm" style={{ width: 'fit-content' }}>
-                      {t.ctaText}
-                    </Link>
-                  ) : (
-                    <div style={{ display: 'flex', gap: '.5rem', flexWrap: 'wrap' }}>
-                      {t.links?.map(l => (
-                        <Link key={l.to} to={l.to} className="btn btn-outline btn-sm">
-                          {l.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 05 — SAMPLE WORK
+          ═══════════════════════════════════════════════════════════ */}
+      <section className="section">
+        <div className="container">
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '3.5rem', flexWrap: 'wrap', gap: '1.5rem' }}>
+            <div>
+              <span className="eyebrow eyebrow-blue" style={{ marginBottom: '1rem' }}>What We Deliver</span>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.85rem,3.5vw,2.75rem)', fontWeight: 900, color: 'var(--slate-900)', letterSpacing: '-0.03em' }}>
+                Digital Media Across Every Format.
+              </h2>
+            </div>
+            <Link to="/services" className="btn btn-outline btn-arrow">
+              All Services <ArrowRight size={15} className="arrow-icon" />
+            </Link>
+          </div>
+
+          <div className="grid-4">
+            {sampleWork.map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: i * 0.09 }}
+              >
+                <div style={{
+                  borderRadius: '20px', overflow: 'hidden',
+                  background: item.gradient,
+                  position: 'relative',
+                  aspectRatio: '4/3',
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  cursor: 'pointer',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 24px 60px rgba(0,0,0,0.18)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+                >
+                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+                  {/* Large emoji center */}
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3.5rem' }}>
+                    {item.emoji}
+                  </div>
+                  {/* Bottom overlay */}
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%)',
+                    display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '1.5rem',
+                  }}>
+                    <span style={{
+                      fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+                      background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.85)',
+                      padding: '0.2rem 0.6rem', borderRadius: '6px', backdropFilter: 'blur(8px)',
+                      display: 'inline-block', marginBottom: '0.5rem',
+                    }}>
+                      {item.tag}
+                    </span>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 800, color: 'white', lineHeight: 1.25 }}>{item.title}</h3>
+                    <p style={{ fontSize: '0.80rem', color: 'rgba(255,255,255,0.65)', marginTop: '0.3rem', lineHeight: 1.50 }}>{item.desc}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
-        <style>{`
-          .talent-card-hover:hover{ transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: rgba(11,63,160,.15)!important; }
-        `}</style>
       </section>
 
-      {/* ── CTA BANNER ───────────────────────────────────────────── */}
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 06 — LEARNING / INTERNSHIPS TEASER
+          ═══════════════════════════════════════════════════════════ */}
+      <section style={{ background: 'var(--dark-900)', padding: '7rem 0', position: 'relative', overflow: 'hidden' }}>
+        <div className="dot-grid-dark" />
+        <motion.div className="hero-orb"
+          animate={{ scale: [1, 1.18, 1], opacity: [0.12, 0.20, 0.12] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ width: '500px', height: '500px', top: '-80px', left: '-80px', background: 'rgba(20,184,166,0.15)' }}
+        />
+        <motion.div className="hero-orb hero-orb-purple"
+          animate={{ scale: [1, 1.14, 1], opacity: [0.10, 0.16, 0.10] }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+          style={{ width: '380px', height: '380px', bottom: '-80px', right: '-60px' }}
+        />
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'center' }} className="learning-grid">
+
+            {/* Left */}
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65 }}>
+              <span className="eyebrow eyebrow-dark" style={{ marginBottom: '1.5rem' }}>
+                <span className="dot-pulse" />
+                Internships, Courses & Placements
+              </span>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3rem)', fontWeight: 900, color: 'white', letterSpacing: '-0.03em', marginBottom: '1.25rem', lineHeight: 1.12 }}>
+                Learn Digital Media.<br />
+                <span className="text-gradient-brand">With the Experts.</span>
+              </h2>
+              <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.65)', lineHeight: 1.82, marginBottom: '2rem' }}>
+                Beyond our client services, we run internship programmes, social media & digital marketing courses, and campus placement drives across India. Freshers welcome across all domains.
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.5rem' }}>
+                {[
+                  { emoji: '🎓', label: 'Internship Programme', sub: 'Live digital media projects — work from anywhere' },
+                  { emoji: '📚', label: 'Digital Media Courses', sub: 'Social media, email marketing, content & more' },
+                  { emoji: '🏫', label: 'Campus Placements',     sub: 'On-campus drives for colleges across India' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.15 + i * 0.09 }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '1rem',
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '14px', padding: '1rem 1.25rem',
+                    }}
+                  >
+                    <span style={{ fontSize: '1.5rem' }}>{item.emoji}</span>
+                    <div>
+                      <div style={{ fontWeight: 700, color: 'white', fontSize: '0.935rem' }}>{item.label}</div>
+                      <div style={{ fontSize: '0.815rem', color: 'rgba(255,255,255,0.50)', marginTop: '0.15rem' }}>{item.sub}</div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <Link to="/learning" className="btn btn-primary btn-lg btn-arrow">
+                  Explore Learning <ArrowRight size={18} className="arrow-icon" />
+                </Link>
+                <Link to="/careers" className="btn btn-ghost-light btn-lg">
+                  Join the Team
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: highlight cards */}
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.65, delay: 0.12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                {[
+                  { emoji: '🌐', title: 'Social Media',       tag: 'Course', color: '#E1306C' },
+                  { emoji: '📧', title: 'Email Marketing',    tag: 'Course', color: '#F97316' },
+                  { emoji: '🎙️', title: 'Podcast Production', tag: 'Course', color: '#14B8A6' },
+                  { emoji: '📲', title: 'Mobile App Dev',     tag: 'Internship', color: '#7C3AED' },
+                  { emoji: '✍️', title: 'Blog & Content',     tag: 'Internship', color: '#2563EB' },
+                  { emoji: '🎨', title: 'Web Design',         tag: 'Internship', color: '#EC4899' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 + i * 0.06 }}
+                    style={{
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                      borderRadius: '16px', padding: '1.35rem 1.25rem',
+                      transition: 'background 0.25s, transform 0.25s',
+                    }}
+                    whileHover={{ y: -4, backgroundColor: 'rgba(255,255,255,0.08)' }}
+                  >
+                    <div style={{ fontSize: '1.6rem', marginBottom: '0.65rem' }}>{item.emoji}</div>
+                    <div style={{ fontWeight: 700, color: 'white', fontSize: '0.88rem', marginBottom: '0.25rem' }}>{item.title}</div>
+                    <div style={{
+                      fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
+                      color: item.color, background: `${item.color}15`,
+                      padding: '0.2rem 0.5rem', borderRadius: '5px', display: 'inline-block',
+                    }}>
+                      {item.tag}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        <style>{`@media(max-width:900px){.learning-grid{grid-template-columns:1fr!important;}}`}</style>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 07 — ABOUT SNIPPET
+          ═══════════════════════════════════════════════════════════ */}
+      <section className="section section--alt">
+        <div className="grid-mesh-overlay" />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6rem', alignItems: 'center' }} className="about-snap-grid">
+
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <span className="eyebrow eyebrow-blue" style={{ marginBottom: '1.25rem' }}>
+                <span className="dot-pulse" /> About 3HD Media
+              </span>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.85rem,3.5vw,2.65rem)', fontWeight: 900, color: 'var(--slate-900)', letterSpacing: '-0.03em', marginBottom: '1rem', lineHeight: 1.12 }}>
+                Your Complete Digital Media Partner.
+              </h2>
+              <div className="divider-blue" />
+              <p style={{ fontSize: '1.02rem', color: 'var(--slate-600)', lineHeight: 1.82, marginBottom: '1.25rem' }}>
+                3HD Media is a full-service digital media studio based in Prabhadevi, Mumbai. We create every kind of digital content — from Instagram posts and websites to podcasts, ebooks, email campaigns and mobile apps.
+              </p>
+              <p style={{ fontSize: '0.975rem', color: 'var(--slate-500)', lineHeight: 1.80, marginBottom: '2.5rem' }}>
+                Our team of content creators, designers, developers and strategists work together to help brands establish a powerful, professional digital presence — across every platform and every format.
+              </p>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <Link to="/about" className="btn btn-primary btn-arrow">
+                  Our Story <ArrowRight size={15} className="arrow-icon" />
+                </Link>
+                <Link to="/contact" className="btn btn-outline">Get in Touch</Link>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                {[
+                  { emoji: '🎨', title: 'Content Studio',     desc: 'Creative team for every format' },
+                  { emoji: '⚡', title: 'Fast Delivery',       desc: 'Efficient workflows and quick turnaround' },
+                  { emoji: '📊', title: 'Results Focused',    desc: 'Content built to drive growth' },
+                  { emoji: '🏫', title: 'Learning Hub',       desc: 'Internships, courses and placements' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.18 + i * 0.07 }}
+                    style={{
+                      background: 'var(--white)', border: '1px solid var(--border-light)',
+                      borderRadius: '20px', padding: '1.75rem',
+                      transition: 'all 0.25s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)'; e.currentTarget.style.borderColor = 'rgba(37,99,235,0.16)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border-light)' }}
+                  >
+                    <div style={{ fontSize: '1.8rem', marginBottom: '0.75rem' }}>{item.emoji}</div>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '0.95rem', fontWeight: 800, color: 'var(--slate-900)', marginBottom: '0.35rem' }}>{item.title}</h3>
+                    <p style={{ fontSize: '0.82rem', color: 'var(--slate-500)', lineHeight: 1.55 }}>{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        <style>{`@media(max-width:900px){.about-snap-grid{grid-template-columns:1fr!important;}}`}</style>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 08 — CTA BANNER
+          ═══════════════════════════════════════════════════════════ */}
       <section className="cta-section">
         <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem,3.5vw,2.5rem)', fontWeight: 900, color: 'white', marginBottom: '.75rem' }}>
-              Ready to Grow Your Brand with 3HD Media?
+          <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1.25rem' }}>🚀</div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3.25rem)', fontWeight: 900, color: 'white', marginBottom: '1rem', letterSpacing: '-0.03em' }}>
+              Ready to Level Up Your<br />Digital Presence?
             </h2>
-            <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,.7)', marginBottom: '2.25rem', maxWidth: '500px', margin: '0 auto 2.25rem' }}>
-              Whether you're a business seeking digital reach or a brand looking to dominate social media — we're ready to deliver results.
+            <p style={{ fontSize: '1.05rem', color: 'rgba(255,255,255,0.65)', marginBottom: '2.75rem', maxWidth: '520px', margin: '0 auto 2.75rem', lineHeight: 1.78 }}>
+              Tell us about your brand. We'll create the digital media content and strategy that gets you noticed.
             </p>
-            <div style={{ display: 'flex', gap: '.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/contact"  className="btn btn-white btn-lg">Get in Touch</Link>
-              <Link to="/services" className="btn btn-ghost-light btn-lg">Explore Our Services</Link>
+            <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link to="/contact" className="btn btn-white btn-xl btn-arrow">
+                Start a Project <ArrowRight size={18} className="arrow-icon" />
+              </Link>
+              <Link to="/services" className="btn btn-ghost-light btn-xl">
+                Explore Services
+              </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
+      <style>{`
+        @media(max-width:900px){
+          .hero-grid{grid-template-columns:1fr!important;text-align:center;gap:3rem!important;}
+          .hero-visual{display:none!important;}
+        }
+      `}</style>
     </motion.div>
   )
 }

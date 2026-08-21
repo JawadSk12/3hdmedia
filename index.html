@@ -3,13 +3,77 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="3HD Media is a social media advertising and digital media agency delivering mobile video, WiFi/internet/location advertising, and social media marketing solutions — based in Mumbai, India." />
+
+    <!-- Primary SEO -->
+    <title>3HD Media | Digital Advertising & Media Technology — Mumbai</title>
+    <meta name="description" content="3HD Media is a digital media and advertising technology company based in Mumbai. We deliver mobile video streaming, social media advertising, location-based advertising, WiFi advertising, and digital media solutions across India." />
+    <meta name="keywords" content="digital advertising, mobile video streaming, social media marketing, location based advertising, WiFi advertising, Bluetooth advertising, digital media agency, Mumbai, India" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0B0B0F" />
+    <link rel="canonical" href="https://3hdmedia.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="3HD Media" />
+    <meta property="og:title" content="3HD Media | Ideas That Move. Media That Connects." />
+    <meta property="og:description" content="Digital media, advertising and technology solutions built to connect brands with modern audiences — across mobile, social, location, video and beyond." />
+    <meta property="og:url" content="https://3hdmedia.com/" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="3HD Media | Digital Advertising & Media Technology" />
+    <meta name="twitter:description" content="Digital media and advertising technology company based in Mumbai — mobile video streaming, location advertising, social media, WiFi advertising and more." />
+
+    <!-- Schema.org Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "3HD Media",
+      "url": "https://3hdmedia.com/",
+      "description": "Digital media and advertising technology company based in Mumbai, India.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-22-66661314",
+        "contactType": "customer service",
+        "areaServed": "IN",
+        "availableLanguage": ["English", "Hindi"]
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "54, Mamta 'A' Wing, A.M. Marg",
+        "addressLocality": "Prabhadevi, Mumbai",
+        "postalCode": "400025",
+        "addressRegion": "Maharashtra",
+        "addressCountry": "IN"
+      },
+      "email": "info@3hdmedia.com",
+      "telephone": "+91-22-66661314"
+    }
+    </script>
+
+    <!-- Fonts: preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <title>3HD Media | Social Media & Digital Advertising Agency — Mumbai</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Skip-to-content for accessibility -->
+    <style>
+      .skip-link {
+        position: absolute; top: -40px; left: 1rem; z-index: 9999;
+        background: #2563EB; color: white; padding: 0.5rem 1rem;
+        border-radius: 6px; font-weight: 700; font-size: 0.875rem;
+        text-decoration: none; transition: top 0.2s;
+      }
+      .skip-link:focus { top: 1rem; }
+    </style>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
