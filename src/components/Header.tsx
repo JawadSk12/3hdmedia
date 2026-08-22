@@ -107,7 +107,7 @@ export default function Header() {
             <img
               src={logo}
               alt="3HD Media"
-              style={{ height: '72px', width: 'auto', objectFit: 'contain', transition: 'transform 0.3s ease' }}
+              style={{ height: '86px', width: 'auto', objectFit: 'contain', transition: 'transform 0.3s ease' }}
               onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
               onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             />
