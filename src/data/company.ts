@@ -4,12 +4,12 @@
 
 export const company = {
   name: '3HD Media',
-  tagline: 'Your Complete Digital Media Partner.',
-  taglineSub: 'We Create. We Distribute. We Grow.',
-  description: 'A full-service digital media studio creating social media content, websites, apps, podcasts, ebooks, email marketing and more.',
+  tagline: 'A Full-Service Digital Media Agency.',
+  taglineSub: 'Strategy. Content. Distribution. Results.',
+  description: 'A full-service digital media agency in Mumbai — social media, websites, content, podcasts, email marketing and mobile apps.',
   longDescription:
-    '3HD Media is a full-service digital media studio based in Mumbai. We help brands, businesses and individuals establish a powerful digital presence — through compelling content, beautiful design and smart strategy across every digital platform.',
-  positioning: 'Digital Media Studio · Content · Design · Development',
+    '3HD Media is a full-service digital media agency based in Mumbai. We help brands plan, create and execute digital strategy across social media, web, content, audio, email and mobile — delivering integrated digital campaigns that grow audiences and drive results.',
+  positioning: 'Digital Media Agency · Strategy · Content · Campaigns',
   location: 'Mumbai, India',
   contact: {
     email: 'info@3hdmedia.com',
