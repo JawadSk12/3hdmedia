@@ -107,7 +107,8 @@ export default function Header() {
             <img
               src={logo}
               alt="3HD Media"
-              style={{ height: '54px', width: 'auto', minWidth: '130px', objectFit: 'contain', transition: 'transform 0.3s ease' }}
+              className="header-logo-img"
+              style={{ height: '54px', width: 'auto', minWidth: '120px', objectFit: 'contain', transition: 'transform 0.3s ease' }}
               onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
               onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             />
@@ -259,7 +260,7 @@ export default function Header() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
             <Link
               to="/contact"
-              className="btn btn-primary btn-sm btn-arrow"
+              className="btn btn-primary btn-sm btn-arrow header-cta-btn"
               style={{ whiteSpace: 'nowrap', borderRadius: '10px', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
             >
               Let's Talk <ArrowRight size={14} className="arrow-icon" />
@@ -359,6 +360,12 @@ export default function Header() {
         @media (max-width: 1050px) {
           .desktop-nav { display: none !important; }
           .mobile-toggle { display: flex !important; }
+        }
+        @media (max-width: 640px) {
+          .header-logo-img { height: 42px !important; min-width: 95px !important; }
+        }
+        @media (max-width: 520px) {
+          .header-cta-btn { display: none !important; }
         }
         @media (min-width: 1051px) {
           .mobile-toggle { display: none !important; }

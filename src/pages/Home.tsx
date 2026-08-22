@@ -181,7 +181,7 @@ export default function Home() {
               </p>
 
               {/* Key capabilities as tags */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '2.75rem' }}>
+              <div className="hero-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '2.75rem' }}>
                 {[
                   '📊 Digital Strategy',
                   '📱 Social Media',
@@ -206,7 +206,7 @@ export default function Home() {
               </div>
 
               {/* CTAs */}
-              <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
+              <div className="hero-ctas" style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
                 <Link to="/services" className="btn btn-primary btn-lg btn-arrow">
                   Our Services <ArrowRight size={18} className="arrow-icon" />
                 </Link>
@@ -216,7 +216,7 @@ export default function Home() {
               </div>
 
               {/* Trust strip */}
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+              <div className="hero-stats" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
                 {[
                   { val: 'Full-Service', label: 'Digital Agency' },
                   { val: 'Pan-India',    label: 'Client Reach' },
@@ -679,8 +679,20 @@ export default function Home() {
 
       <style>{`
         @media(max-width:900px){
-          .hero-grid{grid-template-columns:1fr!important;text-align:center;gap:3rem!important;}
+          .hero-grid{grid-template-columns:1fr!important;text-align:center;gap:2.5rem!important;}
           .hero-visual{display:none!important;}
+        }
+        @media(max-width:640px){
+          .hero-tags, .hero-ctas, .hero-stats { justify-content: center !important; }
+          .hero-ctas .btn { width: 100% !important; justify-content: center !important; }
+          .services-grid { grid-template-columns: 1fr !important; }
+          .process-grid { grid-template-columns: 1fr !important; }
+          .about-snap-grid { grid-template-columns: 1fr !important; }
+          .industry-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media(max-width:420px){
+          .industry-grid { grid-template-columns: 1fr !important; }
+          .hero-stats { gap: 1.25rem !important; }
         }
       `}</style>
     </motion.div>
