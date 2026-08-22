@@ -33,6 +33,8 @@ function RotatingPhrase() {
           color: p.color,
           fontStyle: 'italic',
           whiteSpace: 'nowrap',
+          lineHeight: 1.15,
+          paddingBottom: '0.15rem',
         }}
       >
         {p.text}
@@ -154,12 +156,18 @@ export default function Home() {
                 fontSize: 'clamp(2.8rem, 5.5vw, 4.8rem)',
                 fontWeight: 900,
                 color: 'white',
-                lineHeight: 1.04,
+                lineHeight: 1.12,
                 letterSpacing: '-0.038em',
                 marginBottom: '1.75rem',
               }}>
                 <div>We Drive</div>
-                <div style={{ overflow: 'hidden', height: 'clamp(3rem, 6vw, 5.2rem)', display: 'flex', alignItems: 'center' }}>
+                <div style={{
+                  overflow: 'hidden',
+                  height: 'clamp(3.6rem, 6.8vw, 5.8rem)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '0.2rem 0',
+                }}>
                   <RotatingPhrase />
                 </div>
                 <div>For Your Brand.</div>
