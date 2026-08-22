@@ -243,19 +243,21 @@ h1,h2,h3,h4,h5,h6 {
 }
 .btn::after {
   content: ''; position: absolute; inset: 0;
-  background: rgba(255,255,255,0.10); opacity: 0;
+  background: rgba(255,255,255,0); opacity: 0;
   transition: var(--t-base);
 }
-.btn:hover::after { opacity: 1; }
+.btn:hover::after { opacity: 0; }
 
 .btn-primary {
-  background: var(--g-blue);
-  color: var(--white);
-  box-shadow: var(--shadow-blue);
+  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.40), 0 1px 3px rgba(0,0,0,0.12);
+  border-color: transparent;
 }
 .btn-primary:hover {
+  background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-blue-lg);
+  box-shadow: 0 8px 28px rgba(37,99,235,0.50), 0 2px 6px rgba(0,0,0,0.14);
 }
 
 .btn-purple {
