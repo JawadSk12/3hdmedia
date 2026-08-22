@@ -96,12 +96,12 @@ export default function Footer() {
             <h3 className="footer-col-title">Services</h3>
             <ul style={{ display: 'flex', flexDirection: 'column' }}>
               {[
-                { to: '/services#social-media',          label: '📱 Social Media' },
-                { to: '/services#websites',              label: '🌐 Websites & Web Pages' },
-                { to: '/services#ebooks-publications',   label: '📖 eBooks & Publications' },
-                { to: '/services#podcasts-audio',        label: '🎙️ Podcasts & Audio' },
-                { to: '/services#email-marketing-blogs', label: '✉️ Email & Blogs' },
-                { to: '/services#mobile-apps',           label: '📲 Mobile Apps' },
+                { to: '/services/social-media',          label: '📱 Social Media' },
+                { to: '/services/websites',              label: '🌐 Websites & Web Pages' },
+                { to: '/services/ebooks-publications',   label: '📖 eBooks & Publications' },
+                { to: '/services/podcasts-audio',        label: '🎙️ Podcasts & Audio' },
+                { to: '/services/email-marketing-blogs', label: '✉️ Email & Blogs' },
+                { to: '/services/mobile-apps',           label: '📲 Mobile Apps' },
               ].map(l => (
                 <li key={l.to}>
                   <Link to={l.to} className="footer-link">{l.label}</Link>

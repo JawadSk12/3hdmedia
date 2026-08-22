@@ -5,12 +5,12 @@ import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react'
 import logo from '../assets/logo.png'
 
 const serviceDropdown = [
-  { label: '📱 Social Media',        href: '/services#social-media',          sub: 'Content, strategy & management' },
-  { label: '🌐 Websites & Web Pages', href: '/services#websites',              sub: 'Design & development' },
-  { label: '📖 eBooks & Publications',href: '/services#ebooks-publications',   sub: 'Digital books & guides' },
-  { label: '🎙️ Podcasts & Audio',    href: '/services#podcasts-audio',        sub: 'Production & distribution' },
-  { label: '✉️ Email & Blogs',       href: '/services#email-marketing-blogs', sub: 'Campaigns & content' },
-  { label: '📲 Mobile Apps',          href: '/services#mobile-apps',           sub: 'iOS & Android development' },
+  { label: '📱 Social Media',        href: '/services/social-media',          sub: 'Content, strategy & management' },
+  { label: '🌐 Websites & Web Pages', href: '/services/websites',              sub: 'Design & development' },
+  { label: '📖 eBooks & Publications',href: '/services/ebooks-publications',   sub: 'Digital books & guides' },
+  { label: '🎙️ Podcasts & Audio',    href: '/services/podcasts-audio',        sub: 'Production & distribution' },
+  { label: '✉️ Email & Blogs',       href: '/services/email-marketing-blogs', sub: 'Campaigns & content' },
+  { label: '📲 Mobile Apps',          href: '/services/mobile-apps',           sub: 'iOS & Android development' },
 ]
 
 const navLinks = [
@@ -107,7 +107,7 @@ export default function Header() {
             <img
               src={logo}
               alt="3HD Media"
-              style={{ height: '58px', width: 'auto', objectFit: 'contain', transition: 'transform 0.3s ease' }}
+              style={{ height: '72px', width: 'auto', objectFit: 'contain', transition: 'transform 0.3s ease' }}
               onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
               onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             />

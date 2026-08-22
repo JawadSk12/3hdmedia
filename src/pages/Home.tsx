@@ -5,18 +5,18 @@ import { ArrowRight, ChevronRight, CheckCircle, TrendingUp, Target, Layers, Zap 
 
 /* ── Rotating headline phrases ─────────────────────────────────── */
 const ROTATING_PHRASES = [
-  { text: 'Digital Strategy',     color: '#2563EB' },
-  { text: 'Social Media',         color: '#E1306C' },
-  { text: 'Content & Creative',   color: '#7C3AED' },
-  { text: 'Digital Campaigns',    color: '#14B8A6' },
-  { text: 'Performance Marketing',color: '#F97316' },
-  { text: 'Mobile & Web',         color: '#EC4899' },
+  { text: 'Digital Strategy',   color: '#60A5FA' },
+  { text: 'Social Media',       color: '#F472B6' },
+  { text: 'Content & Creative', color: '#A78BFA' },
+  { text: 'Digital Campaigns',  color: '#34D399' },
+  { text: 'Email Marketing',    color: '#FB923C' },
+  { text: 'Mobile & Web',       color: '#38BDF8' },
 ]
 
 function RotatingPhrase() {
   const [idx, setIdx] = useState(0)
   useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % ROTATING_PHRASES.length), 2400)
+    const t = setInterval(() => setIdx(i => (i + 1) % ROTATING_PHRASES.length), 2600)
     return () => clearInterval(t)
   }, [])
   const p = ROTATING_PHRASES[idx]
@@ -24,11 +24,16 @@ function RotatingPhrase() {
     <AnimatePresence mode="wait">
       <motion.span
         key={idx}
-        initial={{ y: 44, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: -44, opacity: 0 }}
-        transition={{ duration: 0.30, ease: [0.4, 0, 0.2, 1] }}
-        style={{ display: 'inline-block', color: p.color, fontStyle: 'italic' }}
+        initial={{ y: 52, opacity: 0 }}
+        animate={{ y: 0,  opacity: 1 }}
+        exit={{    y: -52, opacity: 0 }}
+        transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+        style={{
+          display: 'block',
+          color: p.color,
+          fontStyle: 'italic',
+          whiteSpace: 'nowrap',
+        }}
       >
         {p.text}
       </motion.span>
@@ -82,12 +87,12 @@ const process = [
 
 /* ── What we handle (agency services grid) ─────────────────────── */
 const agencyServices = [
-  { emoji: '📱', title: 'Social Media Management',    desc: 'Strategy, content creation, community management and paid campaigns across all major platforms.', color: '#E1306C' },
-  { emoji: '🌐', title: 'Website & Digital Presence', desc: 'Fast, SEO-optimised websites, landing pages and digital experiences that convert.', color: '#2563EB' },
-  { emoji: '🎙️', title: 'Content & Audio Production', desc: 'Branded podcasts, audio content, streaming distribution and editorial content across formats.', color: '#14B8A6' },
-  { emoji: '📧', title: 'Email Marketing & Blogs',    desc: 'Campaign strategy, email design, automation sequences and SEO-driven blog content.', color: '#F97316' },
-  { emoji: '📖', title: 'Digital Publications',       desc: 'eBooks, whitepapers, industry guides and interactive digital content for authority and lead generation.', color: '#7C3AED' },
-  { emoji: '📲', title: 'Mobile App Development',     desc: 'UX design and development for iOS and Android — from concept to App Store launch.', color: '#EC4899' },
+  { emoji: '📱', title: 'Social Media Management',    desc: 'Strategy, content creation, community management and paid campaigns across all major platforms.', color: '#E1306C', id: 'social-media' },
+  { emoji: '🌐', title: 'Website & Digital Presence', desc: 'Fast, SEO-optimised websites, landing pages and digital experiences that convert.', color: '#2563EB', id: 'websites' },
+  { emoji: '🎙️', title: 'Content & Audio Production', desc: 'Branded podcasts, audio content, streaming distribution and editorial content across formats.', color: '#14B8A6', id: 'podcasts-audio' },
+  { emoji: '📧', title: 'Email Marketing & Blogs',    desc: 'Campaign strategy, email design, automation sequences and SEO-driven blog content.', color: '#F97316', id: 'email-marketing-blogs' },
+  { emoji: '📖', title: 'Digital Publications',       desc: 'eBooks, whitepapers, industry guides and interactive digital content for authority and lead generation.', color: '#7C3AED', id: 'ebooks-publications' },
+  { emoji: '📲', title: 'Mobile App Development',     desc: 'UX design and development for iOS and Android — from concept to App Store launch.', color: '#EC4899', id: 'mobile-apps' },
 ]
 
 /* ══════════════════════════════════════════════════════════════════
@@ -370,7 +375,7 @@ export default function Home() {
                 <p style={{ fontSize: '0.875rem', color: 'var(--slate-500)', lineHeight: 1.70, marginBottom: '1.25rem' }}>
                   {svc.desc}
                 </p>
-                <Link to="/services" style={{
+                <Link to={`/services/${svc.id}`} style={{
                   display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
                   fontSize: '0.83rem', fontWeight: 700, color: svc.color,
                   transition: 'gap 0.2s',

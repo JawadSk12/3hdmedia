@@ -5,15 +5,16 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 
 // Pages
-import Home     from './pages/Home'
-import About    from './pages/About'
-import Services from './pages/Services'
-import Work     from './pages/Work'
-import Insights from './pages/Insights'
-import Career   from './pages/Career'
-import Learning from './pages/Learning'
-import Contact  from './pages/Contact'
-import NotFound from './pages/NotFound'
+import Home          from './pages/Home'
+import About         from './pages/About'
+import Services      from './pages/Services'
+import ServiceDetail from './pages/ServiceDetail'
+import Work          from './pages/Work'
+import Insights      from './pages/Insights'
+import Career        from './pages/Career'
+import Learning      from './pages/Learning'
+import Contact       from './pages/Contact'
+import NotFound      from './pages/NotFound'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -33,7 +34,8 @@ function AppRoutes() {
             {/* Core pages */}
             <Route path="/"         element={<Home />} />
             <Route path="/about"    element={<About />} />
-            <Route path="/services" element={<Services />} />
+            <Route path="/services"          element={<Services />} />
+            <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/work"     element={<Work />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="/careers"  element={<Career />} />
