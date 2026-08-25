@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import { company } from '../data/company'
 
 export default function About() {
@@ -236,6 +236,79 @@ export default function About() {
           </div>
         </div>
         <style>{`@media(max-width:768px){.story-card-grid{grid-template-columns:1fr!important;}}`}</style>
+      </section>
+
+      {/* ── MANAGEMENT TEAM PREVIEW SECTION ──────────────────────── */}
+      <section className="section" style={{ background: 'linear-gradient(180deg, var(--white) 0%, var(--slate-50) 100%)', borderTop: '1px solid var(--border-light)' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }} className="mgmt-preview-grid">
+            <motion.div initial={{ opacity: 0, x: -24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <span className="eyebrow eyebrow-blue" style={{ marginBottom: '1.25rem' }}>
+                <span className="dot-pulse" /> Leadership & Governance
+              </span>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.85rem,3.5vw,2.65rem)', fontWeight: 900, color: 'var(--slate-900)', letterSpacing: '-0.03em', marginBottom: '1rem' }}>
+                Management Team & Organizational Structure.
+              </h2>
+              <div className="divider-blue" />
+              <p style={{ fontSize: '1.02rem', color: 'var(--slate-600)', lineHeight: 1.80, marginBottom: '1.25rem' }}>
+                3HD Media is governed by a 7-tier strategic hierarchy — uniting Apex Governance, Executive Leadership, C-Suite VPs, Departmental Managers, and specialized execution units.
+              </p>
+
+              {/* CLO Callout highlight */}
+              <div style={{
+                background: 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%)',
+                borderRadius: '20px', padding: '1.5rem', color: 'white',
+                marginBottom: '2rem', boxShadow: '0 12px 30px rgba(30,27,75,0.20)',
+                border: '1px solid rgba(139,92,246,0.3)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#F472B6', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                  <Sparkles size={14} /> Highlight: Chief Learning Officer (CLO)
+                </div>
+                <p style={{ fontSize: '0.88rem', color: 'rgba(255,255,255,0.88)', fontStyle: 'italic', lineHeight: 1.65, marginBottom: '0.5rem' }}>
+                  "{company.managementTeam.cloHighlight.quote}"
+                </p>
+                <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.60)' }}>
+                  Empowering management with continuous AI, tech, and digital media insights.
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <Link to="/management" className="btn btn-primary btn-arrow">
+                  Explore Full Interactive Org Chart <ArrowRight size={15} className="arrow-icon" />
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: Tier summary cards */}
+            <motion.div initial={{ opacity: 0, x: 24 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.12 }} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              {[
+                { badge: 'Apex Governance', roles: 'Chairman · Board of Directors' },
+                { badge: 'Executive Leadership & Advisory', roles: 'CEO · MD · CLO (Chief Learning Officer)' },
+                { badge: 'C-Suite & Vice Presidents', roles: 'VP Marketing · VP Sales · CFO · VP HR · CIO' },
+                { badge: 'Senior Management & Legal', roles: 'GM (General Manager) · Head Legal' },
+                { badge: 'Departmental Managers & Tech', roles: 'Brand Managers · Sales Managers · Company Sec. · HR Managers · CTO' },
+                { badge: 'Operational & Execution Teams', roles: 'CS Managers · Sales Execs · Account Managers · Admin · Asst. CTO · Super Stars · Data Scientist' },
+              ].map((tier, i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: 'var(--white)', border: '1px solid var(--border-light)',
+                    borderRadius: '16px', padding: '1rem 1.25rem',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--blue-600)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.2rem' }}>
+                    Tier {i + 1}: {tier.badge}
+                  </div>
+                  <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--slate-800)' }}>
+                    {tier.roles}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+        <style>{`@media(max-width:900px){.mgmt-preview-grid{grid-template-columns:1fr!important;}}`}</style>
       </section>
 
       {/* ── LOCATION ─────────────────────────────────────────────── */}

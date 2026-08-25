@@ -14,13 +14,14 @@ const serviceDropdown = [
 ]
 
 const navLinks = [
-  { to: '/',         label: 'Home',     end: true },
-  { to: '/about',    label: 'About' },
-  { to: '/services', label: 'Services', hasDropdown: true },
-  { to: '/work',     label: 'Work' },
-  { to: '/insights', label: 'Insights' },
-  { to: '/learning', label: 'Learning' },
-  { to: '/careers',  label: 'Careers' },
+  { to: '/',           label: 'Home',     end: true },
+  { to: '/about',      label: 'About' },
+  { to: '/management', label: 'Management' },
+  { to: '/services',   label: 'Services', hasDropdown: true },
+  { to: '/work',       label: 'Work' },
+  { to: '/insights',   label: 'Insights' },
+  { to: '/learning',   label: 'Learning' },
+  { to: '/careers',    label: 'Careers' },
 ]
 
 export default function Header() {
@@ -32,7 +33,7 @@ export default function Header() {
   const location                            = useLocation()
 
   // Detect dark hero pages where nav starts transparent
-  const isDarkPage = ['/', '/about', '/work', '/insights'].includes(location.pathname)
+  const isDarkPage = ['/', '/about', '/management', '/work', '/insights'].includes(location.pathname)
 
   useEffect(() => { setMobileOpen(false); setServicesOpen(false) }, [location.pathname])
 

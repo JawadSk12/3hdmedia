@@ -115,12 +115,13 @@ export default function Footer() {
             <h3 className="footer-col-title">Company</h3>
             <ul style={{ display: 'flex', flexDirection: 'column' }}>
               {[
-                { to: '/about',    label: 'About Us' },
-                { to: '/work',     label: 'Our Work' },
-                { to: '/insights', label: 'Insights' },
-                { to: '/careers',  label: 'Careers' },
-                { to: '/learning', label: 'Internships & Courses' },
-                { to: '/contact',  label: 'Contact Us' },
+                { to: '/about',      label: 'About Us' },
+                { to: '/management', label: 'Management Team' },
+                { to: '/work',       label: 'Our Work' },
+                { to: '/insights',   label: 'Insights' },
+                { to: '/careers',    label: 'Careers' },
+                { to: '/learning',   label: 'Internships & Courses' },
+                { to: '/contact',    label: 'Contact Us' },
               ].map((l, i) => (
                 <li key={i}>
                   <Link to={l.to} className="footer-link">{l.label}</Link>

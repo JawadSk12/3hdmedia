@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 // Pages
 import Home          from './pages/Home'
 import About         from './pages/About'
+import Management    from './pages/Management'
 import Services      from './pages/Services'
 import ServiceDetail from './pages/ServiceDetail'
 import Work          from './pages/Work'
@@ -32,17 +33,19 @@ function AppRoutes() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             {/* Core pages */}
-            <Route path="/"         element={<Home />} />
-            <Route path="/about"    element={<About />} />
+            <Route path="/"           element={<Home />} />
+            <Route path="/about"      element={<About />} />
+            <Route path="/management" element={<Management />} />
             <Route path="/services"          element={<Services />} />
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
-            <Route path="/work"     element={<Work />} />
-            <Route path="/insights" element={<Insights />} />
-            <Route path="/careers"  element={<Career />} />
-            <Route path="/learning" element={<Learning />} />
-            <Route path="/contact"  element={<Contact />} />
+            <Route path="/work"       element={<Work />} />
+            <Route path="/insights"   element={<Insights />} />
+            <Route path="/careers"    element={<Career />} />
+            <Route path="/learning"   element={<Learning />} />
+            <Route path="/contact"    element={<Contact />} />
 
             {/* Legacy redirects */}
+            <Route path="/team"        element={<Navigate to="/management" replace />} />
             <Route path="/career"      element={<Navigate to="/careers"  replace />} />
             <Route path="/internships" element={<Navigate to="/learning" replace />} />
             <Route path="/courses"     element={<Navigate to="/learning" replace />} />
